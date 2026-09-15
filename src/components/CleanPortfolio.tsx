@@ -135,18 +135,18 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
         {/* Center Hero: Preserved Exactly as made */}
         <div className="relative z-10 w-full max-w-3xl flex flex-col items-center text-center">
           
-          {/* Exact Manish Wordmark with 'hello, I am' over 'M' and red 'i' dot */}
+          {/* Exact Manish Wordmark with 'Hello, I am' over 'M' and red 'i' dot */}
           <div className="relative inline-flex items-center justify-center select-none">
-            {/* Small 'hello, I am' positioned at the top-left over the 'M' in matching monospace font */}
+            {/* Small 'Hello, I am' positioned 3px above M letter at 50px left */}
             <span
               className="absolute font-mono text-zinc-500 tracking-tight select-text"
               style={{
-                top: '-0.5em',
-                left: '0.05em',
+                bottom: 'calc(100% + 3px)',
+                left: '50px',
                 fontSize: 'clamp(11px, 1.8vw, 15px)',
               }}
             >
-              hello, I am
+              Hello, I am
             </span>
 
             <h1
@@ -168,12 +168,12 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
             </h1>
           </div>
 
-          {/* Subtitle with exact 14px gap as requested */}
+          {/* Subtitle centered below logo with 5px gap */}
           <p
-            className="text-base sm:text-lg md:text-xl font-mono text-zinc-600 tracking-tight"
-            style={{ marginTop: '14px' }}
+            className="text-base sm:text-lg md:text-xl font-mono text-zinc-600 tracking-tight text-center"
+            style={{ marginTop: '5px' }}
           >
-            Web Developer &amp; App Developer
+            Web &amp; App Developer
           </p>
         </div>
 
@@ -361,7 +361,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
       <footer className="w-full py-12 border-t border-zinc-200 bg-white text-zinc-500 font-mono text-xs">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            © {new Date().getFullYear()} Manish. Web Developer &amp; App Developer.
+            © {new Date().getFullYear()} Manish. Web &amp; App Developer.
           </div>
           <div className="flex items-center gap-5">
             <a href="#hero" className="hover:text-zinc-900 transition-colors">

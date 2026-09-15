@@ -7,16 +7,16 @@ export const BrandSpecHero: React.FC = () => {
         
         {/* Wordmark with the actual 'i' dot in dark red */}
         <div className="relative inline-flex items-center justify-center select-none">
-          {/* Small 'hello, I am' positioned at the top-left over the 'M' in matching monospace font */}
+          {/* Small 'Hello, I am' positioned 3px above M letter at 50px left */}
           <span
             className="absolute font-mono text-zinc-500 tracking-tight select-text"
             style={{
-              top: '-0.5em',
-              left: '0.05em',
+              bottom: 'calc(100% + 3px)',
+              left: '50px',
               fontSize: 'clamp(11px, 1.8vw, 15px)',
             }}
           >
-            hello, I am
+            Hello, I am
           </span>
 
           <h1
@@ -38,12 +38,12 @@ export const BrandSpecHero: React.FC = () => {
           </h1>
         </div>
 
-        {/* Showcase text below the logo with exact 14px gap */}
+        {/* Showcase text below the logo with 5px gap */}
         <p
-          className="text-base sm:text-lg md:text-xl font-mono text-zinc-600 tracking-tight"
-          style={{ marginTop: '14px' }}
+          className="text-base sm:text-lg md:text-xl font-mono text-zinc-600 tracking-tight text-center"
+          style={{ marginTop: '5px' }}
         >
-          Web Developer &amp; App Developer
+          Web &amp; App Developer
         </p>
 
       </div>
