@@ -26,6 +26,7 @@ import { GrigolettiServicesSection } from './GrigolettiServicesSection';
 import { GrigolettiProjectsSection } from './GrigolettiProjectsSection';
 import { TechStackShowcase } from './TechStackShowcase';
 import { WorkExperienceSection } from './WorkExperienceSection';
+import { VideoTextAnimation } from './VideoTextAnimation';
 
 interface CleanPortfolioProps {
   onSelectProject?: (project: Project) => void;
@@ -135,11 +136,11 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
         {/* Center Hero: Preserved Exactly as made */}
         <div className="relative z-10 w-full max-w-3xl flex flex-col items-center text-center">
           
-          {/* Exact Manish Wordmark with 'Hello, I am' over 'M' and red 'i' dot */}
+          {/* Exact Manish Wordmark with 'Hello, I am' over 'M' and video text animation */}
           <div className="relative inline-flex items-center justify-center select-none">
             {/* Small 'Hello, I am' positioned 3px above M letter at 50px left */}
             <span
-              className="absolute font-mono text-zinc-500 tracking-tight select-text"
+              className="absolute font-mono text-zinc-500 tracking-tight select-text z-10"
               style={{
                 bottom: 'calc(100% + 3px)',
                 left: '50px',
@@ -149,23 +150,10 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
               Hello, I am
             </span>
 
-            <h1
-              className="font-script text-[#000000] tracking-normal leading-none inline-block select-text"
-              style={{
-                fontSize: 'clamp(72px, 15vw, 140px)',
-                lineHeight: 1,
-              }}
-            >
-              Man<span className="inline-block relative">
-                <span className="text-[#000000]">ı</span>
-                <span
-                  className="absolute left-1/2 -translate-x-1/2 w-[0.145em] h-[0.145em] rounded-full bg-[#b91c1c] pointer-events-none"
-                  style={{
-                    top: '0.12em',
-                  }}
-                />
-              </span>sh
-            </h1>
+            <div className="relative flex items-center justify-center">
+              <VideoTextAnimation className="h-[clamp(110px,21vw,210px)] w-auto object-contain max-w-full" />
+              <h1 className="sr-only">Manish</h1>
+            </div>
           </div>
 
           {/* Subtitle centered below logo with 5px gap */}
