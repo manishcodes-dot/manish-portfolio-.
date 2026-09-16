@@ -19,7 +19,7 @@ interface TechItem {
   icon: React.ElementType;
   bgClass: string;
   shadowClass?: string;
-  proficiency?: string;
+  type?: string;
 }
 
 const FRONTEND_TECHS: TechItem[] = [
@@ -30,7 +30,7 @@ const FRONTEND_TECHS: TechItem[] = [
     icon: FlutterIcon,
     bgClass: 'bg-[#02569B] text-white',
     shadowClass: 'shadow-sm shadow-[#02569B]/20',
-    proficiency: 'Production'
+    type: 'Framework'
   },
   {
     id: 'react',
@@ -39,7 +39,7 @@ const FRONTEND_TECHS: TechItem[] = [
     icon: ReactIcon,
     bgClass: 'bg-[#18181b] text-[#61DAFB]',
     shadowClass: 'shadow-sm shadow-zinc-900/20',
-    proficiency: 'Advanced'
+    type: 'Library'
   },
   {
     id: 'javascript',
@@ -48,7 +48,7 @@ const FRONTEND_TECHS: TechItem[] = [
     icon: JavaScriptIcon,
     bgClass: 'bg-[#F7DF1E] text-black',
     shadowClass: 'shadow-sm shadow-[#F7DF1E]/25',
-    proficiency: 'Advanced'
+    type: 'Language'
   },
   {
     id: 'riverpod',
@@ -57,7 +57,7 @@ const FRONTEND_TECHS: TechItem[] = [
     icon: RiverpodIcon,
     bgClass: 'bg-[#005596] text-white',
     shadowClass: 'shadow-sm shadow-[#005596]/20',
-    proficiency: 'Production'
+    type: 'State Mgmt'
   },
 ];
 
@@ -69,7 +69,7 @@ const BACKEND_TECHS: TechItem[] = [
     icon: NodeJsIcon,
     bgClass: 'bg-[#2E7D32] text-white',
     shadowClass: 'shadow-sm shadow-[#2E7D32]/20',
-    proficiency: 'Advanced'
+    type: 'Runtime'
   },
   {
     id: 'nextjs',
@@ -78,7 +78,7 @@ const BACKEND_TECHS: TechItem[] = [
     icon: NextJsIcon,
     bgClass: 'bg-[#000000] text-white',
     shadowClass: 'shadow-sm shadow-black/20',
-    proficiency: 'Advanced'
+    type: 'Framework'
   },
 ];
 
@@ -90,7 +90,7 @@ const TOOLS_TECHS: TechItem[] = [
     icon: GitIcon,
     bgClass: 'bg-[#F05032] text-white',
     shadowClass: 'shadow-sm shadow-[#F05032]/25',
-    proficiency: 'Workflow'
+    type: 'Version Control'
   },
   {
     id: 'figma',
@@ -99,7 +99,7 @@ const TOOLS_TECHS: TechItem[] = [
     icon: FigmaIcon,
     bgClass: 'bg-[#18181b] text-white',
     shadowClass: 'shadow-sm shadow-black/20',
-    proficiency: 'Design'
+    type: 'Design Tool'
   },
   {
     id: 'firebase',
@@ -108,7 +108,7 @@ const TOOLS_TECHS: TechItem[] = [
     icon: FirebaseIcon,
     bgClass: 'bg-[#FFCA28] text-white',
     shadowClass: 'shadow-sm shadow-[#FFCA28]/30',
-    proficiency: 'Cloud'
+    type: 'Cloud Platform'
   },
 ];
 
@@ -120,7 +120,7 @@ const DATABASE_TECHS: TechItem[] = [
     icon: MongoDbIcon,
     bgClass: 'bg-[#13AA52] text-white',
     shadowClass: 'shadow-sm shadow-[#13AA52]/20',
-    proficiency: 'Production'
+    type: 'Database'
   },
 ];
 
@@ -194,9 +194,7 @@ export const TechStackShowcase: React.FC = () => {
                         </div>
                       </div>
 
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-500 group-hover:bg-white transition-colors">
-                        {tech.proficiency}
-                      </span>
+
                     </div>
                   );
                 })}
@@ -237,9 +235,7 @@ export const TechStackShowcase: React.FC = () => {
                         </div>
                       </div>
 
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-500 group-hover:bg-white transition-colors">
-                        {tech.proficiency}
-                      </span>
+
                     </div>
                   );
                 })}
@@ -285,9 +281,7 @@ export const TechStackShowcase: React.FC = () => {
                         </div>
                       </div>
 
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-500 group-hover:bg-white transition-colors">
-                        {tech.proficiency}
-                      </span>
+
                     </div>
                   );
                 })}
@@ -328,9 +322,7 @@ export const TechStackShowcase: React.FC = () => {
                         </div>
                       </div>
 
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-100 text-zinc-500 group-hover:bg-white transition-colors">
-                        {tech.proficiency}
-                      </span>
+
                     </div>
                   );
                 })}
