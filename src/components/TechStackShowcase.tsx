@@ -3,13 +3,13 @@ import {
   FlutterIcon,
   ReactIcon,
   JavaScriptIcon,
-  RiverpodIcon,
   NodeJsIcon,
   NextJsIcon,
   GitIcon,
   FigmaIcon,
   FirebaseIcon,
   MongoDbIcon,
+  PostgresSqlIcon,
 } from './TechLogoIcons';
 
 interface TechItem {
@@ -29,7 +29,7 @@ const FRONTEND_TECHS: TechItem[] = [
     category: 'Cross-Platform App UI',
     icon: FlutterIcon,
     bgClass: 'bg-[#02569B] text-white',
-    shadowClass: 'shadow-sm shadow-[#02569B]/20',
+    shadowClass: 'shadow-sm shadow-[#02569B]/25',
     type: 'Framework'
   },
   {
@@ -37,8 +37,8 @@ const FRONTEND_TECHS: TechItem[] = [
     name: 'REACT',
     category: 'Component Architecture',
     icon: ReactIcon,
-    bgClass: 'bg-[#18181b] text-[#61DAFB]',
-    shadowClass: 'shadow-sm shadow-zinc-900/20',
+    bgClass: 'bg-[#20232A] text-[#61DAFB]',
+    shadowClass: 'shadow-sm shadow-[#20232A]/25',
     type: 'Library'
   },
   {
@@ -50,15 +50,6 @@ const FRONTEND_TECHS: TechItem[] = [
     shadowClass: 'shadow-sm shadow-[#F7DF1E]/25',
     type: 'Language'
   },
-  {
-    id: 'riverpod',
-    name: 'RIVERPOD',
-    category: 'Declarative State Management',
-    icon: RiverpodIcon,
-    bgClass: 'bg-[#005596] text-white',
-    shadowClass: 'shadow-sm shadow-[#005596]/20',
-    type: 'State Mgmt'
-  },
 ];
 
 const BACKEND_TECHS: TechItem[] = [
@@ -67,8 +58,8 @@ const BACKEND_TECHS: TechItem[] = [
     name: 'NODE.JS',
     category: 'Asynchronous Event Runtime',
     icon: NodeJsIcon,
-    bgClass: 'bg-[#2E7D32] text-white',
-    shadowClass: 'shadow-sm shadow-[#2E7D32]/20',
+    bgClass: 'bg-[#539E43] text-white',
+    shadowClass: 'shadow-sm shadow-[#539E43]/25',
     type: 'Runtime'
   },
   {
@@ -77,7 +68,7 @@ const BACKEND_TECHS: TechItem[] = [
     category: 'Full-Stack & SSR Framework',
     icon: NextJsIcon,
     bgClass: 'bg-[#000000] text-white',
-    shadowClass: 'shadow-sm shadow-black/20',
+    shadowClass: 'shadow-sm shadow-black/25',
     type: 'Framework'
   },
 ];
@@ -97,8 +88,8 @@ const TOOLS_TECHS: TechItem[] = [
     name: 'FIGMA',
     category: 'UI/UX Design Systems',
     icon: FigmaIcon,
-    bgClass: 'bg-[#18181b] text-white',
-    shadowClass: 'shadow-sm shadow-black/20',
+    bgClass: 'bg-[#1E1E1E] text-white',
+    shadowClass: 'shadow-sm shadow-[#1E1E1E]/25',
     type: 'Design Tool'
   },
   {
@@ -106,8 +97,8 @@ const TOOLS_TECHS: TechItem[] = [
     name: 'FIREBASE',
     category: 'Auth, Firestore & Hosting',
     icon: FirebaseIcon,
-    bgClass: 'bg-[#FFCA28] text-white',
-    shadowClass: 'shadow-sm shadow-[#FFCA28]/30',
+    bgClass: 'bg-[#FFA000] text-white',
+    shadowClass: 'shadow-sm shadow-[#FFA000]/25',
     type: 'Cloud Platform'
   },
 ];
@@ -119,7 +110,16 @@ const DATABASE_TECHS: TechItem[] = [
     category: 'Document Storage & Aggregation',
     icon: MongoDbIcon,
     bgClass: 'bg-[#13AA52] text-white',
-    shadowClass: 'shadow-sm shadow-[#13AA52]/20',
+    shadowClass: 'shadow-sm shadow-[#13AA52]/25',
+    type: 'Database'
+  },
+  {
+    id: 'postgresql',
+    name: 'POSTGRESQL',
+    category: 'Relational Database Engine',
+    icon: PostgresSqlIcon,
+    bgClass: 'bg-[#336791] text-white',
+    shadowClass: 'shadow-sm shadow-[#336791]/25',
     type: 'Database'
   },
 ];
@@ -148,7 +148,7 @@ export const TechStackShowcase: React.FC = () => {
 
           <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>10 Core Technologies</span>
+            <span>10 Core Languages</span>
           </div>
         </div>
 
@@ -165,7 +165,7 @@ export const TechStackShowcase: React.FC = () => {
                   FRONTEND
                 </h3>
                 <span className="text-[11px] font-mono text-zinc-400">
-                  {FRONTEND_TECHS.length} technologies
+                  {FRONTEND_TECHS.length} Languages
                 </span>
               </div>
 
@@ -208,7 +208,7 @@ export const TechStackShowcase: React.FC = () => {
                   DATABASE
                 </h3>
                 <span className="text-[11px] font-mono text-zinc-400">
-                  {DATABASE_TECHS.length} technology
+                  {DATABASE_TECHS.length} Languages
                 </span>
               </div>
 
@@ -254,7 +254,7 @@ export const TechStackShowcase: React.FC = () => {
                   BACKEND
                 </h3>
                 <span className="text-[11px] font-mono text-zinc-400">
-                  {BACKEND_TECHS.length} technologies
+                  {BACKEND_TECHS.length} Languages
                 </span>
               </div>
 
@@ -295,7 +295,7 @@ export const TechStackShowcase: React.FC = () => {
                   TOOLS
                 </h3>
                 <span className="text-[11px] font-mono text-zinc-400">
-                  {TOOLS_TECHS.length} tools
+                  {TOOLS_TECHS.length} Tools
                 </span>
               </div>
 

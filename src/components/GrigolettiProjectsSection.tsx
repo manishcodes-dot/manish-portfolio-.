@@ -96,8 +96,8 @@ const SHOWCASE_PROJECTS: ShowcaseProject[] = [
 ];
 
 export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps> = ({ onSelectProject }) => {
-  // Alice Toschi (index 1) default active or active on hover
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(1);
+  // null by default so no project preview is shown until hovered
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <section 
@@ -126,8 +126,11 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
           </div>
         </div>
 
-        {/* Interactive List with Preview on Hover */}
-        <div className="divide-y divide-zinc-200/80 border-t border-b border-zinc-200/80">
+        {/* Interactive List with Instant Preview on Hover */}
+        <div 
+          onMouseLeave={() => setHoveredIndex(null)}
+          className="divide-y divide-zinc-200/80 border-t border-b border-zinc-200/80"
+        >
           {SHOWCASE_PROJECTS.map((project, index) => {
             const isHovered = hoveredIndex === index;
 
@@ -135,14 +138,14 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
               <div
                 key={project.id}
                 onMouseEnter={() => setHoveredIndex(index)}
-                className={`transition-all duration-300 relative ${
+                className={`transition-all duration-200 ease-out relative cursor-pointer ${
                   isHovered 
                     ? 'bg-zinc-950 text-white rounded-2xl my-3 shadow-xl p-5 sm:p-7' 
-                    : 'py-5 sm:py-6 px-2 sm:px-3 hover:bg-zinc-50/60 cursor-pointer'
+                    : 'py-5 sm:py-6 px-2 sm:px-3 hover:bg-zinc-50/60'
                 }`}
               >
                 {!isHovered ? (
-                  /* Standard Row State (Clean, minimal, website aesthetic) */
+                  /* Standard Row State (Instant render) */
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
                     <div className="flex items-center gap-4 sm:gap-6">
                       <span className="font-mono text-xs text-zinc-400 uppercase tracking-wider shrink-0 w-32 sm:w-40">
@@ -161,8 +164,8 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
                     </div>
                   </div>
                 ) : (
-                  /* Hovered State with Live Preview & Website Theme */
-                  <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                  /* Hovered State with Live Preview */
+                  <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 transition-opacity duration-150">
                     
                     {/* Left Details: Category, Title, Description, Buttons */}
                     <div className="flex-1 space-y-4">
@@ -220,17 +223,6 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
                             <span>Code</span>
                           </a>
                         )}
-
-                        {onSelectProject && project.originalProject && (
-                          <button
-                            type="button"
-                            onClick={() => onSelectProject(project.originalProject!)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white font-mono text-xs border border-zinc-800 hover:border-zinc-700 transition-colors cursor-pointer"
-                          >
-                            <Layers className="w-3.5 h-3.5" />
-                            <span>Architecture</span>
-                          </button>
-                        )}
                       </div>
                     </div>
 
@@ -245,8 +237,8 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
                         <img
                           src={project.previewImage}
                           alt={`Website Preview for ${project.title}`}
-                          className="w-full h-full object-cover object-top group-hover/preview:scale-105 transition-transform duration-500"
-                          loading="lazy"
+                          className="w-full h-full object-cover object-top group-hover/preview:scale-105 transition-transform duration-300"
+                          loading="eager"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover/preview:opacity-100 transition-opacity flex items-end p-3">
                           <span className="text-xs font-mono text-white flex items-center gap-1.5 font-medium">
