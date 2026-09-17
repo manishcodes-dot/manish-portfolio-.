@@ -63,7 +63,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     { label: 'View Featured Projects', href: '#projects', icon: FolderGit2, section: 'Navigation' },
     { label: 'Inspect Technical Matrix', href: '#stack', icon: Briefcase, section: 'Navigation' },
     { label: 'Launch Interactive CLI Terminal', action: () => { onClose(); onOpenTerminal(); }, icon: Terminal, section: 'Actions' },
-    { label: 'View Career Experience', href: '#experience', icon: Briefcase, section: 'Navigation' },
+    { label: 'View Education & Academic Background', href: '#experience', icon: Briefcase, section: 'Navigation' },
     { label: 'Initiate Contact & Transmission', href: '#contact', icon: ExternalLink, section: 'Navigation' },
     { label: `Toggle Theme (${theme === 'light' ? 'Dark Mode' : 'Light Mode'})`, action: onToggleTheme, icon: theme === 'dark' ? Sun : Moon, section: 'Actions' },
     { label: `Copy Direct Email (${PERSONAL_INFO.email})`, action: handleCopyEmail, icon: copiedEmail ? Check : Copy, section: 'Actions' },
