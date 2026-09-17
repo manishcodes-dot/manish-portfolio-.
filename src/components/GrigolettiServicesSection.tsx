@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowDownRight, ArrowUpRight, Globe, Smartphone, Cpu, Laptop } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, Globe, Smartphone, Cpu, Laptop, Globe2 } from 'lucide-react';
 
 interface SubService {
   number: string;
@@ -20,22 +20,22 @@ interface ServiceItem {
 const SERVICES_DATA: ServiceItem[] = [
   {
     number: '01.',
-    category: 'Websites building',
-    title: 'Web Development',
+    category: 'Normal to SAAS Websites',
+    title: 'Websites',
     question: 'Need an ultra-fast, accessible, and functionable web application?',
     description: 'Building responsive, lightning-fast web applications with React, TypeScript, Next.js, and modern CSS engines. Engineered with sub-second page loads, accessibility compliance, and interactive animations.',
     subservices: [
       { number: '01', label: 'Single Page to Multi-Page Websites' },
-      { number: '02', label: 'Design Systems & functionanle components' },
-      { number: '03', label: 'backend connection & api connection' }
+      { number: '02', label: 'Design Systems & Functionanle components' },
+      { number: '03', label: 'backend & REST Api connection' }
     ],
     tags: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'javascript', 'REST API', 'Node.js', 'MongoDB/PostgreSQL'],
     icon: Laptop
   },
   {
     number: '02.',
-    category: 'MOBILE & DISTRIBUTED SYSTEMS',
-    title: 'App Development',
+    category: 'Cross-platfrom Mobiles apps',
+    title: 'App',
     description: 'Cross-platform mobile applications, microservices, and distributed backend pipelines. Implementing reliable state engines, local-first offline syncing, background workers, and real-time protocols.',
     question: 'Looking to build iOS & Android experiences app for your business ?',
     subservices: [
@@ -48,17 +48,17 @@ const SERVICES_DATA: ServiceItem[] = [
   },
   {
     number: '03.',
-    category: 'INFRASTRUCTURE & SEO',
-    title: 'SEO & Systems',
+    category: 'SEO & Systems',
+    title: 'SEO',
     question: 'Need to rank site or business at the top of the search result ?',
     description: 'Constructing robust backend services, microservice architectures, and search engine optimization. From WebSocket event relays to transactional database engines with strict ACID integrity and Core Web Vitals optimization.',
     subservices: [
       { number: '01', label: 'Keywords Research & analysis' },
       { number: '02', label: 'Technical SEO & Web Master' },
-      { number: '03', label: 'Sites Optimization' }
+      { number: '03', label: 'Wordpress' }
     ],
     tags: ['Keywords Research', 'Google', 'Search Engine', 'SEO', 'Technical SEO','Web Master'],
-    icon: Cpu
+    icon: Globe
   }
 ];
 
@@ -78,22 +78,22 @@ export const GrigolettiServicesSection: React.FC = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Section Header matching Jeff Milanes / CleanPortfolio format */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-14">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold">
+            <span className="block text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
               // 02. SERVICES &amp; EXPERTISE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 mt-1">
-              What I Do
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-wide text-zinc-950 mt-2 mb-3">
+              {"What I Can Do For You"}
             </h2>
-            <p className="text-sm text-zinc-500 mt-1.5 max-w-lg">
+            <p className="text-sm text-zinc-500 mt-2 max-w-lg leading-relaxed">
               Crafting robust digital solutions from architectural conceptualization to high-performance production releases.
             </p>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400">
+          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400 mb-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Interactive Directory</span>
+            <span>Click to learn more</span>
           </div>
         </div>
 
@@ -165,24 +165,9 @@ export const GrigolettiServicesSection: React.FC = () => {
                   className={`overflow-hidden transition-all duration-300 ease-in-out px-2 sm:px-4 ${isOpen ? 'max-h-[600px] opacity-100 pb-8 sm:pb-10' : 'max-h-0 opacity-0 pb-0'
                     }`}
                 >
-                  <div className="pt-2 pl-0 sm:pl-16 space-y-6">
-                    {/* The Need / Prompt */}
-                    <div className="p-4 rounded-xl bg-white border border-zinc-200/90 shadow-2xs">
-                      <div className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider mb-1">
-                        // THE NEED
-                      </div>
-                      <p className="text-sm font-semibold text-zinc-900">
-                        "{service.question}"
-                      </p>
-                    </div>
-
-                    {/* Detailed Paragraph */}
-                    <p className="text-sm text-zinc-600 leading-relaxed max-w-2xl font-sans">
-                      {service.description}
-                    </p>
-
+                  <div className="pt-2 pl-0 sm:pl-16 space-y-4">
                     {/* Subservices Checklist with Clean Hairline Dividers */}
-                    <div className="space-y-2.5 pt-2">
+                    <div className="space-y-2.5">
                       <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 font-semibold">
                         CORE DELIVERABLES &amp; EXECUTION
                       </div>
@@ -203,24 +188,13 @@ export const GrigolettiServicesSection: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Tech Tags & Discuss Button */}
-                    <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex flex-wrap gap-1.5">
-                        {service.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="px-2.5 py-1 rounded-md bg-white border border-zinc-200 text-zinc-700 text-xs font-mono shadow-2xs"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
+                    {/* Discuss Button */}
+                    <div className="pt-2 flex justify-end">
                       <a
                         href="#contact"
                         className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-zinc-950 hover:underline shrink-0"
                       >
-                        <span>Discuss {service.title}</span>
+                        <span>Build {service.title}</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
                       </a>
                     </div>

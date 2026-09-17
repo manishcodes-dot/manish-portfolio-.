@@ -24,7 +24,7 @@ const WORK_EXPERIENCES: WorkExperienceItem[] = [
     description: 'At Informatics College, I graduated with a degree in Computer Science & Information Technology, focusing on software engineering, web application architecture, algorithms, and modern frontend development.',
     logoSrc: '/assets/img/informaticse imgsvg.svg',
     tileBg: 'bg-white border border-zinc-200 text-zinc-950 shadow-sm',
-    technologies: ['Computer Science', 'Software Engineering', 'React', 'TypeScript', 'Web Architecture', 'Database Systems']
+    technologies: ['Computer Science', 'Software Engineering', 'Web Development', 'Web Architecture', 'Database Systems']
   },
   {
     id: 'fishtail-infosolutions',
