@@ -47,8 +47,23 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 border-t border-zinc-200/80 dark:border-zinc-900 scroll-mt-16">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <section id="contact" className="py-20 border-t border-zinc-200/80 dark:border-zinc-900 scroll-mt-16 relative overflow-hidden">
+      {/* Background Image with Artistic Adjustments */}
+      <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
+        <img 
+          src="/assets/img/contant bg.png" 
+          alt="Contact background" 
+          className="w-full h-full object-cover object-center opacity-40 dark:opacity-20 mix-blend-multiply dark:mix-blend-luminosity scale-105 filter contrast-[1.08] brightness-[1.02]"
+        />
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.95) 100%)'
+          }}
+        />
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <div className="mb-10">
           <div className="flex items-center gap-2 font-mono text-xs text-emerald-600 dark:text-emerald-400 mb-2 font-medium">
@@ -106,7 +121,10 @@ export const ContactSection: React.FC = () => {
             {/* Availability Status */}
             <div className="p-5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 space-y-2 shadow-xs">
               <div className="flex items-center gap-2 text-xs font-mono text-emerald-800 dark:text-emerald-400 font-semibold">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
+                <span className="relative flex h-2 w-2 items-center justify-center">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600 dark:bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
+                </span>
                 <span>CURRENT CAPACITY & AVAILABILITY</span>
               </div>
               <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
