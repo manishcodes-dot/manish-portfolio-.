@@ -54,9 +54,8 @@ export const ContactSection: React.FC = () => {
         <img 
           src="/assets/img/contant bg.png" 
           alt="Contact background" 
-          className="w-full h-full object-cover object-center scale-105 filter contrast-[1.08] brightness-[1.02]"
+          className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/80 via-zinc-950/50 to-emerald-950/80" />
       </div>
 
       {/* Layer 1: Ink Reveal Mask Canvas */}
@@ -86,12 +85,12 @@ export const ContactSection: React.FC = () => {
           {/* Left Column: Direct Info */}
           <div className="lg:col-span-5 space-y-6">
             {/* Direct Email Card */}
-            <div className="p-5 rounded-xl bg-transparent border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
-              <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-2">Direct Communication Channel:</div>
-              <div className="flex items-center justify-between gap-2 p-3 rounded-lg bg-transparent border border-zinc-200 dark:border-zinc-800/80 mb-3">
+            <div className="p-5 rounded-xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
+              <div className="text-xs font-mono text-zinc-600 dark:text-zinc-400 mb-2 font-semibold">Direct Communication Channel:</div>
+              <div className="flex items-center justify-between gap-2 p-3 rounded-lg bg-zinc-50/90 dark:bg-zinc-950/90 border border-zinc-200 dark:border-zinc-800/80 mb-3">
                 <a
                   href={`mailto:${PERSONAL_INFO.email}`}
-                  className="font-mono text-xs sm:text-sm text-emerald-700 dark:text-emerald-300 hover:underline font-medium truncate"
+                  className="font-mono text-xs sm:text-sm text-emerald-700 dark:text-emerald-300 hover:underline font-bold truncate"
                   title="Click to email directly"
                 >
                   {PERSONAL_INFO.email}
@@ -110,9 +109,9 @@ export const ContactSection: React.FC = () => {
                 </button>
               </div>
 
-              <div className="space-y-2 text-xs font-mono text-zinc-600 dark:text-zinc-400">
+              <div className="space-y-2 text-xs font-mono text-zinc-700 dark:text-zinc-300 font-medium">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-zinc-400" />
+                  <Clock className="w-3.5 h-3.5 text-zinc-500" />
                   <span>Turnaround: Typically &lt; 12 hours</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -123,28 +122,28 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Availability Status */}
-            <div className="p-5 rounded-xl bg-transparent border border-emerald-200 dark:border-emerald-900/50 space-y-2 shadow-xs">
-              <div className="flex items-center gap-2 text-xs font-mono text-emerald-800 dark:text-emerald-400 font-semibold">
+            <div className="p-5 rounded-xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-emerald-200 dark:border-emerald-900/50 space-y-2 shadow-xs">
+              <div className="flex items-center gap-2 text-xs font-mono text-emerald-800 dark:text-emerald-400 font-bold">
                 <span className="relative flex h-2 w-2 items-center justify-center">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600 dark:bg-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
                 </span>
                 <span>CURRENT CAPACITY & AVAILABILITY</span>
               </div>
-              <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed font-sans">
+              <p className="text-xs text-zinc-800 dark:text-zinc-200 leading-relaxed font-sans font-medium">
                 Open to senior engineering contracts, distributed architecture consulting, and high-growth full-time opportunities.
               </p>
             </div>
 
             {/* Social Channels */}
-            <div className="p-5 rounded-xl bg-transparent border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
-              <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-3">Network & Code Registries:</div>
+            <div className="p-5 rounded-xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
+              <div className="text-xs font-mono text-zinc-600 dark:text-zinc-400 mb-3 font-semibold">Network & Code Registries:</div>
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <a
                   href={PERSONAL_INFO.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 transition-colors"
+                  className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 transition-colors font-medium"
                 >
                   <div className="flex items-center gap-2">
                     <Github className="w-4 h-4" />
@@ -157,7 +156,7 @@ export const ContactSection: React.FC = () => {
                   href={PERSONAL_INFO.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 transition-colors"
+                  className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-800 transition-colors font-medium"
                 >
                   <div className="flex items-center gap-2">
                     <Linkedin className="w-4 h-4" />
@@ -171,7 +170,7 @@ export const ContactSection: React.FC = () => {
 
           {/* Right Column: Contact Transmission Form */}
           <div className="lg:col-span-7">
-            <div className="p-6 sm:p-7 rounded-xl bg-transparent border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
+            <div className="p-6 sm:p-7 rounded-xl bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
               {submittedReceipt ? (
                 <div className="space-y-4 font-mono text-xs animate-in fade-in duration-200">
                   <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-sm font-bold">

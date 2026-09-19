@@ -309,9 +309,8 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
           <img
             src="/assets/img/contant bg.png"
             alt="Revealed Contact Section Background"
-            className="w-full h-full object-cover object-center scale-105 filter contrast-[1.08] brightness-[1.02]"
+            className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/80 via-zinc-950/50 to-emerald-950/80" />
         </div>
 
         {/* Layer 1: Ink Reveal Canvas Overlay (Erases mask on hover/drag to reveal background image) */}
@@ -324,16 +323,16 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
 
         {/* Layer 2: Contact Section Content */}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-20">
-          <div className="text-center space-y-4 mb-12">
+          <div className="text-center space-y-3 mb-12">
             <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-zinc-500 font-semibold block mb-1">
+              <span className="text-xs font-mono uppercase tracking-widest text-zinc-700 font-bold block mb-1">
                 // 06. INITIATE CONTACT
               </span>
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-950">
                 Let's Build Something Together
               </h2>
             </div>
-            <p className="text-zinc-700 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium">
+            <p className="text-zinc-800 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium bg-white/80 backdrop-blur-md px-4 py-2 rounded-xl border border-zinc-200/80 shadow-2xs inline-block">
               Available for full-stack web applications, mobile engineering, systems architecture, or open-source collaboration. Feel free to reach out directly.
             </p>
           </div>
@@ -342,27 +341,27 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
             
             {/* Left Contact Info (2 columns) */}
             <div className="md:col-span-2 space-y-6">
-              <div className="p-5 rounded-2xl bg-transparent border border-zinc-200/90 shadow-sm space-y-3 font-mono text-xs">
-                <span className="text-zinc-400 font-bold uppercase block tracking-wider">// DIRECT EMAIL</span>
+              <div className="p-5 rounded-2xl bg-white/90 backdrop-blur-md border border-zinc-200/90 shadow-sm space-y-3 font-mono text-xs">
+                <span className="text-zinc-500 font-bold uppercase block tracking-wider">// DIRECT EMAIL</span>
                 <a 
                   href={`mailto:${PERSONAL_INFO.email}`} 
-                  className="text-zinc-900 font-bold hover:underline block break-all text-sm"
+                  className="text-zinc-950 font-bold hover:underline block break-all text-sm"
                 >
                   {PERSONAL_INFO.email}
                 </a>
                 <button
                   onClick={handleCopyEmail}
-                  className="w-full py-2 rounded-lg border border-zinc-200 bg-transparent hover:bg-zinc-100/50 text-zinc-700 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs mt-2"
+                  className="w-full py-2 rounded-lg border border-zinc-200 bg-white/90 hover:bg-white text-zinc-800 font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-2xs mt-2"
                 >
-                  {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
+                  {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" />}
                   <span>{copiedEmail ? 'Copied to Clipboard!' : 'Copy Email Address'}</span>
                 </button>
               </div>
 
-              <div className="p-5 rounded-2xl bg-transparent border border-zinc-200/90 shadow-sm space-y-2 font-mono text-xs text-zinc-600">
-                <span className="text-zinc-400 font-bold uppercase block tracking-wider">// LOCATION &amp; STATUS</span>
-                <div>{PERSONAL_INFO.location}</div>
-                <div className="flex items-center gap-2 text-emerald-600 pt-1 font-medium">
+              <div className="p-5 rounded-2xl bg-white/90 backdrop-blur-md border border-zinc-200/90 shadow-sm space-y-2 font-mono text-xs text-zinc-700">
+                <span className="text-zinc-500 font-bold uppercase block tracking-wider">// LOCATION &amp; STATUS</span>
+                <div className="font-medium text-zinc-900">{PERSONAL_INFO.location}</div>
+                <div className="flex items-center gap-2 text-emerald-700 pt-1 font-semibold">
                   <span className="relative flex h-2 w-2 items-center justify-center">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
@@ -377,7 +376,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
                     href={PERSONAL_INFO.github}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 py-2.5 rounded-xl border border-zinc-200/90 bg-transparent hover:bg-zinc-100/50 text-zinc-700 hover:text-zinc-950 transition-colors flex items-center justify-center gap-2 font-mono text-xs shadow-2xs"
+                    className="flex-1 py-2.5 rounded-xl border border-zinc-200/90 bg-white/90 backdrop-blur-md hover:bg-white text-zinc-800 hover:text-zinc-950 transition-colors flex items-center justify-center gap-2 font-mono text-xs font-semibold shadow-2xs"
                   >
                     <Github className="w-4 h-4" />
                     <span>GitHub</span>
@@ -388,7 +387,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
                     href={PERSONAL_INFO.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 py-2.5 rounded-xl border border-zinc-200/90 bg-transparent hover:bg-zinc-100/50 text-zinc-700 hover:text-zinc-950 transition-colors flex items-center justify-center gap-2 font-mono text-xs shadow-2xs"
+                    className="flex-1 py-2.5 rounded-xl border border-zinc-200/90 bg-white/90 backdrop-blur-md hover:bg-white text-zinc-800 hover:text-zinc-950 transition-colors flex items-center justify-center gap-2 font-mono text-xs font-semibold shadow-2xs"
                   >
                     <Linkedin className="w-4 h-4" />
                     <span>LinkedIn</span>
@@ -399,9 +398,9 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
 
             {/* Right Contact Form (3 columns) */}
             <div className="md:col-span-3">
-              <form onSubmit={handleFormSubmit} className="p-6 sm:p-7 rounded-2xl bg-transparent border border-zinc-200/90 shadow-sm space-y-4">
+              <form onSubmit={handleFormSubmit} className="p-6 sm:p-7 rounded-2xl bg-white/90 backdrop-blur-md border border-zinc-200/90 shadow-sm space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-xs font-mono text-zinc-600 mb-1">
+                  <label htmlFor="name" className="block text-xs font-mono text-zinc-700 font-semibold mb-1">
                     Your Name
                   </label>
                   <input
@@ -411,12 +410,12 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Jane Doe"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-transparent border border-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/90 border border-zinc-200 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all shadow-2xs"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-xs font-mono text-zinc-600 mb-1">
+                  <label htmlFor="email" className="block text-xs font-mono text-zinc-700 font-semibold mb-1">
                     Your Email
                   </label>
                   <input
@@ -426,12 +425,12 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="jane@example.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-transparent border border-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/90 border border-zinc-200 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all shadow-2xs"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-xs font-mono text-zinc-600 mb-1">
+                  <label htmlFor="message" className="block text-xs font-mono text-zinc-700 font-semibold mb-1">
                     Message / Project Details
                   </label>
                   <textarea
@@ -441,7 +440,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Tell me about your project scope, timeline, and goals..."
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-transparent border border-zinc-200 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/90 border border-zinc-200 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all resize-none shadow-2xs"
                   />
                 </div>
 
