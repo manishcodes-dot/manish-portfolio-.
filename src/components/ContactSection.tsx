@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Copy, Check, Send, ArrowUpRight, Github, Linkedin, Clock, ShieldCheck, Sparkles } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
+import InkReveal from '@/components/ui/ink-reveal';
 
 export const ContactSection: React.FC = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
@@ -47,23 +48,26 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 border-t border-zinc-200/80 dark:border-zinc-900 scroll-mt-16 relative overflow-hidden">
-      {/* Background Image with Artistic Adjustments */}
-      <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
+    <section id="contact" className="py-20 border-t border-zinc-200/80 dark:border-zinc-900 scroll-mt-16 relative overflow-hidden bg-white dark:bg-zinc-950 select-none">
+      {/* Layer 0: Revealed Background Image */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <img 
           src="/assets/img/contant bg.png" 
           alt="Contact background" 
-          className="w-full h-full object-cover object-center opacity-40 dark:opacity-20 mix-blend-multiply dark:mix-blend-luminosity scale-105 filter contrast-[1.08] brightness-[1.02]"
+          className="w-full h-full object-cover object-center scale-105 filter contrast-[1.08] brightness-[1.02]"
         />
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: 'radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.95) 100%)'
-          }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/80 via-zinc-950/50 to-emerald-950/80" />
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
+      {/* Layer 1: Ink Reveal Mask Canvas */}
+      <InkReveal
+        maskColor={[255, 255, 255]}
+        brushSize={140}
+        lifetime={900}
+        className="z-10"
+      />
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-20">
         {/* Section Header */}
         <div className="mb-10">
           <div className="flex items-center gap-2 font-mono text-xs text-emerald-600 dark:text-emerald-400 mb-2 font-medium">
@@ -82,9 +86,9 @@ export const ContactSection: React.FC = () => {
           {/* Left Column: Direct Info */}
           <div className="lg:col-span-5 space-y-6">
             {/* Direct Email Card */}
-            <div className="p-5 rounded-xl bg-white dark:bg-zinc-900/40 border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
+            <div className="p-5 rounded-xl bg-transparent border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
               <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-2">Direct Communication Channel:</div>
-              <div className="flex items-center justify-between gap-2 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/80 mb-3">
+              <div className="flex items-center justify-between gap-2 p-3 rounded-lg bg-transparent border border-zinc-200 dark:border-zinc-800/80 mb-3">
                 <a
                   href={`mailto:${PERSONAL_INFO.email}`}
                   className="font-mono text-xs sm:text-sm text-emerald-700 dark:text-emerald-300 hover:underline font-medium truncate"
@@ -119,7 +123,7 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Availability Status */}
-            <div className="p-5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/50 space-y-2 shadow-xs">
+            <div className="p-5 rounded-xl bg-transparent border border-emerald-200 dark:border-emerald-900/50 space-y-2 shadow-xs">
               <div className="flex items-center gap-2 text-xs font-mono text-emerald-800 dark:text-emerald-400 font-semibold">
                 <span className="relative flex h-2 w-2 items-center justify-center">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
@@ -133,7 +137,7 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Social Channels */}
-            <div className="p-5 rounded-xl bg-white dark:bg-zinc-900/40 border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
+            <div className="p-5 rounded-xl bg-transparent border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
               <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mb-3">Network & Code Registries:</div>
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <a
@@ -167,7 +171,7 @@ export const ContactSection: React.FC = () => {
 
           {/* Right Column: Contact Transmission Form */}
           <div className="lg:col-span-7">
-            <div className="p-6 sm:p-7 rounded-xl bg-white dark:bg-zinc-900/40 border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
+            <div className="p-6 sm:p-7 rounded-xl bg-transparent border border-zinc-200/90 dark:border-zinc-800/80 shadow-xs">
               {submittedReceipt ? (
                 <div className="space-y-4 font-mono text-xs animate-in fade-in duration-200">
                   <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 text-sm font-bold">
