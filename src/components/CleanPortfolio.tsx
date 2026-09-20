@@ -118,14 +118,11 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
          ========================================================================= */}
       <section id="hero" className="min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 relative overflow-hidden">
 
-        {/* Layer 0: Revealed Background Video */}
+        {/* Layer 0: Revealed Background Image */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-          <video
-            src="/assets/img/hero section vid.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
+          <img
+            src="/assets/img/hero bg.png"
+            alt="Hero background"
             className="w-full h-full object-cover object-center"
           />
         </div>
@@ -135,7 +132,6 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
           maskColor={[255, 255, 255]}
           brushSize={140}
           lifetime={900}
-          permanent={true}
           className="z-10"
         />
 
@@ -323,7 +319,6 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
           maskColor={[255, 255, 255]}
           brushSize={140}
           lifetime={900}
-          permanent={true}
           className="z-10"
         />
 

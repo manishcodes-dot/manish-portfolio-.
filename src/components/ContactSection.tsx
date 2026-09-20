@@ -63,7 +63,6 @@ export const ContactSection: React.FC = () => {
         maskColor={[255, 255, 255]}
         brushSize={140}
         lifetime={900}
-        permanent={true}
         className="z-10"
       />
 
