@@ -40,7 +40,7 @@ const SERVICES_DATA: ServiceItem[] = [
     question: 'Looking to build iOS & Android experiences app for your business ?',
     subservices: [
       { number: '01', label: 'Cross-Platform iOS & Android' },
-      { number: '02', label: 'Offline-App to Local Sync' },
+      { number: '02', label: 'App hosting both in play store and ios' },
       { number: '03', label: 'Realtime-Notifications & Widgets of the apps ' }
     ],
     tags: ['Flutter', 'Node.js', 'MongoDB/PostgreSQL', 'Firebase', 'Redis'],
@@ -53,8 +53,8 @@ const SERVICES_DATA: ServiceItem[] = [
     question: 'Need to rank site or business at the top of the search result ?',
     description: 'Constructing robust backend services, microservice architectures, and search engine optimization. From WebSocket event relays to transactional database engines with strict ACID integrity and Core Web Vitals optimization.',
     subservices: [
-      { number: '01', label: 'Keywords Research & analysis' },
-      { number: '02', label: 'Technical SEO & Web Master' },
+      { number: '01', label: 'Ranking the sites' },
+      { number: '02', label: 'Technical SEO' },
       { number: '03', label: 'Wordpress' }
     ],
     tags: ['Keywords Research', 'Google', 'Search Engine', 'SEO', 'Technical SEO','Web Master'],
