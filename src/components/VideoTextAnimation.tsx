@@ -2,40 +2,19 @@ import React, { useEffect, useRef } from 'react';
 
 interface VideoTextAnimationProps {
   className?: string;
-  onEnded?: () => void;
-  onPlay?: () => void;
-  onCanvasRef?: (canvas: HTMLCanvasElement | null) => void;
-  playbackRate?: number;
-  startAtEnd?: boolean;
 }
 
-export const VideoTextAnimation: React.FC<VideoTextAnimationProps> = ({
-  className,
-  onEnded,
-  onPlay,
-  onCanvasRef,
-  playbackRate = 1.0,
-  startAtEnd = false
-}) => {
+export const VideoTextAnimation: React.FC<VideoTextAnimationProps> = ({ className }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (onCanvasRef) {
-      onCanvasRef(canvasRef.current);
-    }
-  }, [onCanvasRef]);
 
   useEffect(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) return;
 
-    video.playbackRate = playbackRate;
-
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     let animId: number;
-    let hasEndedTriggered = false;
 
     const renderFrame = () => {
       if (video.readyState >= 2 && video.videoWidth && video.videoHeight) {
@@ -53,94 +32,60 @@ export const VideoTextAnimation: React.FC<VideoTextAnimationProps> = ({
         if (ctx) {
           ctx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
           const frame = ctx.getImageData(0, 0, cropW, cropH);
-          const buf32 = new Uint32Array(frame.data.buffer);
-          const len = buf32.length;
+          const data = frame.data;
 
-          // Fast 32-bit uint pixel manipulation (30x faster than 8-bit array loops)
-          for (let i = 0; i < len; i++) {
-            const pixel = buf32[i];
-            const r = pixel & 0xff;
-            const g = (pixel >> 8) & 0xff;
-            const b = (pixel >> 16) & 0xff;
+          // Process each pixel: convert off-white video background to true alpha transparency
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+
+            // Calculate luminance/brightness
             const brightness = (r + g + b) / 3;
 
             if (brightness > 215) {
-              buf32[i] = 0; // Alpha 0
+              // Completely transparent for off-white background
+              data[i + 3] = 0;
             } else if (brightness > 160) {
+              // Smooth anti-aliased edge feathering
               const alphaRatio = (215 - brightness) / 55;
-              const alpha = Math.max(0, Math.min(255, (alphaRatio * 255) | 0));
-              buf32[i] = (pixel & 0x00ffffff) | (alpha << 24);
+              data[i + 3] = Math.max(0, Math.min(255, Math.floor(alphaRatio * 255)));
             }
           }
 
           ctx.putImageData(frame, 0, 0);
         }
-
-        // Check if video reached the final frame
-        const threshold = 0.08 * playbackRate;
-        if (
-          !hasEndedTriggered &&
-          !startAtEnd &&
-          (video.ended || (video.duration > 0 && video.currentTime >= video.duration - threshold))
-        ) {
-          hasEndedTriggered = true;
-          video.pause();
-          if (onEnded) onEnded();
-        }
       }
 
-      if (!hasEndedTriggered || startAtEnd) {
-        animId = requestAnimationFrame(renderFrame);
-      }
+      animId = requestAnimationFrame(renderFrame);
     };
 
     const handlePlay = () => {
-      if (onPlay) onPlay();
+      renderFrame();
     };
 
     const handleEnded = () => {
-      if (!hasEndedTriggered && !startAtEnd) {
-        hasEndedTriggered = true;
-        video.pause();
-        if (onEnded) onEnded();
-      }
+      // Render final frame once when video ends
+      renderFrame();
     };
 
     video.addEventListener('play', handlePlay);
     video.addEventListener('ended', handleEnded);
 
-    if (startAtEnd) {
-      const seekToEnd = () => {
-        if (video.duration > 0) {
-          video.currentTime = Math.max(0, video.duration - 0.05);
-          video.pause();
-          renderFrame();
-        }
-      };
-      if (video.readyState >= 2) {
-        seekToEnd();
-      } else {
-        video.addEventListener('loadedmetadata', seekToEnd, { once: true });
-      }
-    } else {
-      // Ensure video starts playing cleanly from frame 0
-      video.currentTime = 0;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => {
-          console.warn('Video autoplay blocked or pending interaction:', err);
-        });
-      }
-    }
+    // Reset video time to 0 and start playing on load
+    video.currentTime = 0;
+    video.play().catch((err) => {
+      console.warn('Video autoplay blocked or pending interaction:', err);
+    });
 
-    animId = requestAnimationFrame(renderFrame);
+    renderFrame();
 
     return () => {
       cancelAnimationFrame(animId);
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('ended', handleEnded);
     };
-  }, [onEnded, onPlay, playbackRate, startAtEnd]);
+  }, []);
 
   return (
     <div className="relative flex items-center justify-center">
@@ -150,8 +95,7 @@ export const VideoTextAnimation: React.FC<VideoTextAnimationProps> = ({
         autoPlay
         muted
         playsInline
-        preload="auto"
-        className="pointer-events-none opacity-0 absolute w-1 h-1 overflow-hidden"
+        className="hidden"
         aria-hidden="true"
       />
       <canvas

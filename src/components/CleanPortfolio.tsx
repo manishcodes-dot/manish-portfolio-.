@@ -252,7 +252,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
             </span>
 
             <div className="relative flex items-center justify-center">
-              <VideoTextAnimation className="h-[clamp(110px,21vw,210px)] w-auto object-contain max-w-full" startAtEnd={true} />
+              <VideoTextAnimation className="h-[clamp(110px,21vw,210px)] w-auto object-contain max-w-full" />
               <h1 className="sr-only">Manish</h1>
             </div>
           </div>
