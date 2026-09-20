@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useCallback } from "react";
 
 interface InkRevealProps {
+  /** If true, revealed areas remain permanently revealed and do not fade back out */
+  permanent?: boolean;
   /** RGB color of the mask overlay, e.g. [252, 250, 248] */
   maskColor?: [number, number, number];
   /** Radius of each ink stamp in px */
@@ -39,6 +41,7 @@ interface Stamp {
 }
 
 export function InkReveal({
+  permanent = false,
   maskColor = [252, 250, 248],
   brushSize = 128,
   lifetime = 600,
@@ -120,6 +123,22 @@ export function InkReveal({
     [segments, wobble, gradientInnerRadius, gradientStops]
   );
 
+  const drawStampDirectly = useCallback(
+    (x: number, y: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const rmax = brushSize * (1 - rVary + Math.random() * rVary);
+      const seed = Math.random() * Math.PI * 2;
+
+      ctx.globalCompositeOperation = "destination-out";
+      carveInk(ctx, x, y, rmax, seed, 1.0);
+    },
+    [brushSize, rVary, carveInk]
+  );
+
   const addStamp = useCallback(
     (x: number, y: number) => {
       const stamps = stampsRef.current;
@@ -138,23 +157,38 @@ export function InkReveal({
   const stampAlong = useCallback(
     (x: number, y: number) => {
       const last = lastPosRef.current;
-      if (!last) {
-        addStamp(x, y);
+      if (permanent) {
+        if (!last) {
+          drawStampDirectly(x, y);
+        } else {
+          const dx = x - last.x;
+          const dy = y - last.y;
+          const dist = Math.hypot(dx, dy);
+          const steps = Math.max(1, Math.ceil(dist / stampStep));
+          for (let i = 1; i <= steps; i++) {
+            drawStampDirectly(last.x + (dx * i) / steps, last.y + (dy * i) / steps);
+          }
+        }
       } else {
-        const dx = x - last.x;
-        const dy = y - last.y;
-        const dist = Math.hypot(dx, dy);
-        const steps = Math.max(1, Math.ceil(dist / stampStep));
-        for (let i = 1; i <= steps; i++) {
-          addStamp(last.x + (dx * i) / steps, last.y + (dy * i) / steps);
+        if (!last) {
+          addStamp(x, y);
+        } else {
+          const dx = x - last.x;
+          const dy = y - last.y;
+          const dist = Math.hypot(dx, dy);
+          const steps = Math.max(1, Math.ceil(dist / stampStep));
+          for (let i = 1; i <= steps; i++) {
+            addStamp(last.x + (dx * i) / steps, last.y + (dy * i) / steps);
+          }
         }
       }
       lastPosRef.current = { x, y };
     },
-    [addStamp, stampStep]
+    [addStamp, drawStampDirectly, permanent, stampStep]
   );
 
   const loop = useCallback(() => {
+    if (permanent) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -185,14 +219,15 @@ export function InkReveal({
     } else {
       runningRef.current = false;
     }
-  }, [carveInk, mc, lifetime, rStart]);
+  }, [carveInk, mc, lifetime, permanent, rStart]);
 
   const startLoop = useCallback(() => {
+    if (permanent) return;
     if (!runningRef.current) {
       runningRef.current = true;
       requestAnimationFrame(loop);
     }
-  }, [loop]);
+  }, [loop, permanent]);
 
   useEffect(() => {
     resize();
@@ -209,7 +244,9 @@ export function InkReveal({
       const y = e.clientY - rect.top;
       if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
         stampAlong(x, y);
-        startLoop();
+        if (!permanent) {
+          startLoop();
+        }
       }
     };
 
@@ -225,7 +262,7 @@ export function InkReveal({
       parent.removeEventListener("mousemove", handleMouseMove);
       parent.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [resize, stampAlong, startLoop]);
+  }, [resize, stampAlong, startLoop, permanent]);
 
   return (
     <canvas

@@ -118,25 +118,30 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
          ========================================================================= */}
       <section id="hero" className="min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 relative overflow-hidden">
 
-        {/* Hero Background Image with Adjusted Level 5 Opacity & Vignette Mask */}
+        {/* Layer 0: Revealed Background Video */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-          <img
-            src="/assets/img/hero bg.png"
-            alt="Hero background"
-            className="w-full h-full object-cover object-center opacity-70 mix-blend-multiply scale-105 filter contrast-[1.08] brightness-[1.03] saturate-[1.08] transition-opacity duration-700"
-          />
-          {/* Subtle radial & vertical gradient overlay for text readability at Level 5 background clarity */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.35) 60%, rgba(255,255,255,0.88) 100%), linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.92) 100%)'
-            }}
+          <video
+            src="/assets/img/hero section vid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover object-center"
           />
         </div>
 
+        {/* Layer 1: Interactive Ink Reveal Mask Canvas (Same as Contact Section) */}
+        <InkReveal
+          maskColor={[255, 255, 255]}
+          brushSize={140}
+          lifetime={900}
+          permanent={true}
+          className="z-10"
+        />
+
         {/* Subtle geometric dot grid background overlay */}
         <div
-          className="absolute inset-0 pointer-events-none opacity-30 z-0"
+          className="absolute inset-0 pointer-events-none opacity-30 z-10"
           style={{
             backgroundImage: 'radial-gradient(#a1a1aa 1px, transparent 1px)',
             backgroundSize: '28px 28px'
@@ -318,6 +323,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
           maskColor={[255, 255, 255]}
           brushSize={140}
           lifetime={900}
+          permanent={true}
           className="z-10"
         />
 
