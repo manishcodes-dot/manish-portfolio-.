@@ -6,6 +6,8 @@ interface InkRevealProps {
   permanent?: boolean;
   /** RGB color of the mask overlay, e.g. [252, 250, 248] */
   maskColor?: [number, number, number];
+  /** Optional background image URL to draw as mask layer instead of solid color */
+  bgImage?: string;
   /** Radius of each ink stamp in px */
   brushSize?: number;
   /** How long each stamp lives before fading (ms) */
@@ -43,13 +45,14 @@ interface Stamp {
 export function InkReveal({
   permanent = false,
   maskColor = [252, 250, 248],
+  bgImage,
   brushSize = 128,
   lifetime = 600,
   rStart = 10,
   rVary = 0.45,
-  stampStep = 10,
-  maxStamps = 200,
-  segments = 36,
+  stampStep = 14,
+  maxStamps = 90,
+  segments = 20,
   wobble = [0.14, 0.08, 0.05],
   gradientInnerRadius = 0.2,
   gradientStops = [0.95, 0.88, 0],
@@ -60,9 +63,50 @@ export function InkReveal({
   const stampsRef = useRef<Stamp[]>([]);
   const runningRef = useRef(false);
   const lastPosRef = useRef<{ x: number; y: number } | null>(null);
-  const dimsRef = useRef({ w: 0, h: 0 });
+  const dimsRef = useRef({ w: 0, h: 0, dpr: 1 });
+  const bgImgRef = useRef<HTMLImageElement | null>(null);
+  const offscreenRef = useRef<HTMLCanvasElement | null>(null);
 
   const mc = maskColor;
+
+  const updateOffscreenBuffer = useCallback(
+    (w: number, h: number, dpr: number) => {
+      if (!offscreenRef.current) {
+        offscreenRef.current = document.createElement("canvas");
+      }
+      const offscreen = offscreenRef.current;
+      offscreen.width = Math.round(w * dpr);
+      offscreen.height = Math.round(h * dpr);
+
+      const ctx = offscreen.getContext("2d");
+      if (!ctx) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const img = bgImgRef.current;
+      if (img && img.complete && img.naturalWidth > 0) {
+        const imgRatio = img.naturalWidth / img.naturalHeight;
+        const canvasRatio = w / h;
+        let renderW = w;
+        let renderH = h;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (canvasRatio > imgRatio) {
+          renderH = w / imgRatio;
+          offsetY = (h - renderH) / 2;
+        } else {
+          renderW = h * imgRatio;
+          offsetX = (w - renderW) / 2;
+        }
+
+        ctx.drawImage(img, offsetX, offsetY, renderW, renderH);
+      } else {
+        ctx.fillStyle = `rgb(${mc[0]},${mc[1]},${mc[2]})`;
+        ctx.fillRect(0, 0, w, h);
+      }
+    },
+    [mc]
+  );
 
   const resize = useCallback(() => {
     const canvas = canvasRef.current;
@@ -74,18 +118,34 @@ export function InkReveal({
     const rect = parent.getBoundingClientRect();
     const w = rect.width;
     const h = rect.height;
-    dimsRef.current = { w, h };
+    dimsRef.current = { w, h, dpr };
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     canvas.style.width = `${w}px`;
     canvas.style.height = `${h}px`;
+
+    updateOffscreenBuffer(w, h, dpr);
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = `rgb(${mc[0]},${mc[1]},${mc[2]})`;
-    ctx.fillRect(0, 0, w, h);
-  }, [mc]);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    if (offscreenRef.current) {
+      ctx.drawImage(offscreenRef.current, 0, 0);
+    }
+  }, [updateOffscreenBuffer]);
+
+  useEffect(() => {
+    if (bgImage) {
+      const img = new Image();
+      img.src = bgImage;
+      img.onload = () => {
+        bgImgRef.current = img;
+        resize();
+      };
+    } else {
+      bgImgRef.current = null;
+    }
+  }, [bgImage, resize]);
 
   const carveInk = useCallback(
     (
@@ -106,8 +166,9 @@ export function InkReveal({
       ctx.fillStyle = g;
 
       ctx.beginPath();
+      const stepAngle = (Math.PI * 2) / segments;
       for (let i = 0; i <= segments; i++) {
-        const a = (i / segments) * Math.PI * 2;
+        const a = i * stepAngle;
         const wob =
           0.78 +
           wobble[0] * Math.sin(a * 3 + seed) +
@@ -193,13 +254,17 @@ export function InkReveal({
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const { w, h } = dimsRef.current;
+    const { dpr } = dimsRef.current;
     const now = performance.now();
     const stamps = stampsRef.current;
 
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = `rgb(${mc[0]},${mc[1]},${mc[2]})`;
-    ctx.fillRect(0, 0, w, h);
+    if (offscreenRef.current) {
+      ctx.drawImage(offscreenRef.current, 0, 0);
+    }
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.globalCompositeOperation = "destination-out";
 
     for (let i = stamps.length - 1; i >= 0; i--) {
@@ -219,7 +284,7 @@ export function InkReveal({
     } else {
       runningRef.current = false;
     }
-  }, [carveInk, mc, lifetime, permanent, rStart]);
+  }, [carveInk, lifetime, permanent, rStart]);
 
   const startLoop = useCallback(() => {
     if (permanent) return;

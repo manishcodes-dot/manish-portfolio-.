@@ -121,15 +121,15 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
         {/* Layer 0: Revealed Background Image */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           <img
-            src="/assets/img/hero bg.png"
+            src="/assets/img/contant bg.png"
             alt="Hero background"
             className="w-full h-full object-cover object-center"
           />
         </div>
 
-        {/* Layer 1: Interactive Ink Reveal Mask Canvas (Same as Contact Section) */}
+        {/* Layer 1: Interactive Ink Reveal Mask Canvas */}
         <InkReveal
-          maskColor={[255, 255, 255]}
+          bgImage="/assets/img/hero bg.png"
           brushSize={140}
           lifetime={900}
           className="z-10"
@@ -321,6 +321,10 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
           lifetime={900}
           className="z-10"
         />
+
+        {/* Soft edge gradient overlays to make top/bottom background image edges seamless */}
+        <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-white via-white/80 to-transparent pointer-events-none z-15" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-none z-15" />
 
         {/* Layer 2: Contact Section Content */}
         <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-20">

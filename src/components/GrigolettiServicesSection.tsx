@@ -57,7 +57,7 @@ const SERVICES_DATA: ServiceItem[] = [
       { number: '02', label: 'Technical SEO' },
       { number: '03', label: 'Wordpress' }
     ],
-    tags: ['Keywords Research', 'Google', 'Search Engine', 'SEO', 'Technical SEO','Web Master'],
+    tags: ['Keywords Research', 'Google', 'Search Engine', 'SEO', 'Technical SEO', 'Web Master'],
     icon: Globe
   }
 ];
@@ -124,8 +124,8 @@ export const GrigolettiServicesSection: React.FC = () => {
                     <div className="flex items-center gap-3 sm:gap-4">
                       {/* Icon container */}
                       <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl border flex items-center justify-center transition-colors ${isOpen
-                          ? 'bg-zinc-950 text-white border-zinc-950 shadow-2xs'
-                          : 'bg-white border-zinc-200 text-zinc-800 group-hover:border-zinc-300'
+                        ? 'bg-zinc-950 text-white border-zinc-950 shadow-2xs'
+                        : 'bg-white border-zinc-200 text-zinc-800 group-hover:border-zinc-300'
                         }`}>
                         <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
@@ -149,8 +149,8 @@ export const GrigolettiServicesSection: React.FC = () => {
                     </span>
 
                     <div className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-all duration-300 ${isOpen
-                        ? 'bg-zinc-950 border-zinc-950 text-white'
-                        : 'bg-white border-zinc-200 text-zinc-500 group-hover:border-zinc-300 group-hover:text-zinc-900'
+                      ? 'bg-zinc-950 border-zinc-950 text-white'
+                      : 'bg-white border-zinc-200 text-zinc-500 group-hover:border-zinc-300 group-hover:text-zinc-900'
                       }`}>
                       <ArrowDownRight
                         className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-[-90deg]' : 'rotate-0'
