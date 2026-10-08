@@ -63,11 +63,23 @@ const SERVICES_DATA: ServiceItem[] = [
 ];
 
 export const GrigolettiServicesSection: React.FC = () => {
-  // Accordion state: only one open at a time. Default state is closed (null)
+  // Pure hover accordion state for desktop, tap toggle for mobile
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleDropdown = (index: number) => {
-    setOpenIndex(prevIndex => (prevIndex === index ? null : index));
+    setOpenIndex(prev => (prev === index ? null : index));
+  };
+
+  const handleMouseEnter = (index: number) => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      setOpenIndex(index);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (window.matchMedia('(hover: hover)').matches) {
+      setOpenIndex(null);
+    }
   };
 
   return (
@@ -77,7 +89,7 @@ export const GrigolettiServicesSection: React.FC = () => {
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
-        {/* Section Header matching Jeff Milanes / CleanPortfolio format */}
+        {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16">
           <div>
             <span className="block text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
@@ -90,14 +102,9 @@ export const GrigolettiServicesSection: React.FC = () => {
               Crafting robust digital solutions from architectural conceptualization to high-performance production releases.
             </p>
           </div>
-
-          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400 mb-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Click to learn more</span>
-          </div>
         </div>
 
-        {/* Accordion List Styled in Clean Portfolio Aesthetic */}
+        {/* Accordion List */}
         <div className="divide-y divide-zinc-200/80 border-b border-zinc-200/80">
           {SERVICES_DATA.map((service, index) => {
             const isOpen = openIndex === index;
@@ -106,9 +113,11 @@ export const GrigolettiServicesSection: React.FC = () => {
             return (
               <div
                 key={service.number}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={handleMouseLeave}
                 className={`transition-colors duration-200 ${isOpen ? 'bg-zinc-50/50' : 'hover:bg-zinc-50/30'}`}
               >
-                {/* Clickable Header Row */}
+                {/* Header Row */}
                 <button
                   type="button"
                   onClick={() => toggleDropdown(index)}

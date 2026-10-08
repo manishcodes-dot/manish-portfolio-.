@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, Github, ExternalLink, Layers, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Github, ExternalLink, Layers } from 'lucide-react';
 import { Project } from '../types';
 import { PROJECTS } from '../data/portfolioData';
 
@@ -116,13 +116,8 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
               Featured Projects
             </h2>
             <p className="text-sm text-zinc-500 mt-1.5 max-w-lg font-kyoto">
-              I’ve helped businesses and founders build high-converting web applications, digital showrooms, and reliable systems. Hover any project to preview.
+              I’ve helped businesses and founders build high-converting web applications, digital showrooms, and reliable systems.
             </p>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400">
-            <Sparkles className="w-3.5 h-3.5 text-zinc-400" />
-            <span>Hover for Live Preview</span>
           </div>
         </div>
 

@@ -260,12 +260,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
           </div>
         </div>
 
-        {/* Center Hero Title */}
-        <div className="relative z-10 w-full max-w-3xl flex flex-col items-center text-center">
-          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter text-zinc-950 select-none drop-shadow-xs">
-            Manish
-          </h1>
-        </div>
+
 
         {/* Subtle scroll down indicator */}
         <a

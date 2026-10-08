@@ -7,7 +7,7 @@ interface WorkExperienceItem {
   startDate: string;
   endDate: string;
   statusBadge?: string;
-  description: string;
+  description: React.ReactNode;
   logoSrc: string;
   tileBg: string;
   technologies?: string[];
@@ -21,10 +21,19 @@ const WORK_EXPERIENCES: WorkExperienceItem[] = [
     startDate: 'NOV 2021',
     endDate: 'GRADUATED',
     statusBadge: 'GRADUATED',
-    description: 'At Informatics College, I graduated with a degree in Computer Science & Information Technology, focusing on software engineering, web application architecture, algorithms, and modern frontend development.',
+    description: (
+      <>
+        At Informatics College, I graduated with a degree in{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Computer Science</span>{' '}
+        &amp; Information Technology, focusing on{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Software Engineering</span>,{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Web Development</span>,{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Web Architecture</span>, and{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Database Systems</span>.
+      </>
+    ),
     logoSrc: '/assets/img/informaticse imgsvg.svg',
-    tileBg: 'bg-white border border-zinc-200 text-zinc-950 shadow-sm',
-    technologies: ['Computer Science', 'Software Engineering', 'Web Development', 'Web Architecture', 'Database Systems']
+    tileBg: 'bg-white border border-zinc-200 text-zinc-950 shadow-sm'
   },
   {
     id: 'fishtail-infosolutions',
@@ -33,10 +42,18 @@ const WORK_EXPERIENCES: WorkExperienceItem[] = [
     startDate: 'MAR 2023',
     endDate: 'PRESENT',
     statusBadge: 'PRESENT',
-    description: 'At Fishtail Infosolutions, my role involves analyzing search engine performance, performing technical SEO audits, conducting keyword research, and crafting engaging technical copy and content strategies to maximize organic search visibility and user conversion.',
+    description: (
+      <>
+        At Fishtail Infosolutions, my role involves analyzing{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Search Engine Performance</span>, performing{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Technical SEO Audits</span>, conducting{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Keyword Research</span>, and crafting engaging{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Copywriting</span> &amp;{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Content Strategy</span> to maximize organic search visibility and user conversion.
+      </>
+    ),
     logoSrc: '/assets/img/fishtail-logo.png',
-    tileBg: 'bg-[#18181b] text-white shadow-sm shadow-black/15',
-    technologies: ['SEO Analysis', 'Copywriting', 'Technical Writing', 'Content Strategy', 'Keyword Research', 'Search Analytics']
+    tileBg: 'bg-[#18181b] text-white shadow-sm shadow-black/15'
   }
 ];
 
@@ -60,11 +77,6 @@ export const WorkExperienceSection: React.FC = () => {
             <p className="text-sm text-zinc-500 mt-1.5 max-w-lg font-kyoto">
               Engineering track record, SEO analysis &amp; copywriting experience, and academic graduation background.
             </p>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>2 Track Records</span>
           </div>
         </div>
 
@@ -99,22 +111,20 @@ export const WorkExperienceSection: React.FC = () => {
                       <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight">
                         {exp.company}
                       </h3>
-                      {exp.statusBadge && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-50 text-emerald-600 shrink-0">
-                          {exp.statusBadge}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="font-mono text-xs text-zinc-400 tracking-wider">
+                          {exp.id === 'fishtail-infosolutions' ? 'MAR 2023 -' : exp.startDate}
                         </span>
-                      )}
+                        {exp.statusBadge && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-50 text-emerald-600">
+                            {exp.statusBadge}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <div className="text-xs sm:text-sm font-medium text-zinc-700">
                       {exp.role}
-                    </div>
-
-                    {/* Dates */}
-                    <div className="font-mono text-[11px] text-zinc-400 tracking-wider flex items-center gap-1.5 pt-0.5">
-                      <span>{exp.startDate}</span>
-                      <span>-</span>
-                      <span className="text-emerald-600 font-semibold">{exp.endDate}</span>
                     </div>
                   </div>
 

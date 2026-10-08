@@ -145,11 +145,6 @@ export const TechStackShowcase: React.FC = () => {
               Primary languages, frameworks, and developer tools used to build reliable web and mobile applications.
             </p>
           </div>
-
-          <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>10 Core Languages</span>
-          </div>
         </div>
 
         {/* 2-Column Responsive Layout matching the exact structure from the reference image, dressed in the site's clean design system */}
@@ -164,9 +159,6 @@ export const TechStackShowcase: React.FC = () => {
                 <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-zinc-950">
                   FRONTEND
                 </h3>
-                <span className="text-[11px] font-mono text-zinc-400">
-                  {FRONTEND_TECHS.length} Languages
-                </span>
               </div>
 
               <div className="space-y-4">
@@ -207,9 +199,6 @@ export const TechStackShowcase: React.FC = () => {
                 <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-zinc-950">
                   DATABASE
                 </h3>
-                <span className="text-[11px] font-mono text-zinc-400">
-                  {DATABASE_TECHS.length} Languages
-                </span>
               </div>
 
               <div className="space-y-4">
@@ -253,9 +242,6 @@ export const TechStackShowcase: React.FC = () => {
                 <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-zinc-950">
                   BACKEND
                 </h3>
-                <span className="text-[11px] font-mono text-zinc-400">
-                  {BACKEND_TECHS.length} Languages
-                </span>
               </div>
 
               <div className="space-y-4">
@@ -294,9 +280,6 @@ export const TechStackShowcase: React.FC = () => {
                 <h3 className="font-mono text-xs uppercase tracking-widest font-bold text-zinc-950">
                   TOOLS
                 </h3>
-                <span className="text-[11px] font-mono text-zinc-400">
-                  {TOOLS_TECHS.length} Tools
-                </span>
               </div>
 
               <div className="space-y-4">
