@@ -89,10 +89,10 @@ const FADE_PRESETS: Record<string | number, { opacity: number; gradient: string 
   4: { opacity: 0.60, gradient: 'from-[#fbfbfb]/45 via-[#fbfbfb]/20 to-[#fbfbfb]' },
   5: { opacity: 0.80, gradient: 'from-[#fbfbfb]/30 via-transparent to-[#fbfbfb]/90' },
   subtle: { opacity: 0.15, gradient: 'from-[#fbfbfb]/85 via-[#fbfbfb]/50 to-[#fbfbfb]' },
-  light:  { opacity: 0.25, gradient: 'from-[#fbfbfb]/75 via-[#fbfbfb]/40 to-[#fbfbfb]' },
+  light: { opacity: 0.25, gradient: 'from-[#fbfbfb]/75 via-[#fbfbfb]/40 to-[#fbfbfb]' },
   medium: { opacity: 0.40, gradient: 'from-[#fbfbfb]/65 via-[#fbfbfb]/30 to-[#fbfbfb]' },
   strong: { opacity: 0.60, gradient: 'from-[#fbfbfb]/45 via-[#fbfbfb]/20 to-[#fbfbfb]' },
-  vivid:  { opacity: 0.80, gradient: 'from-[#fbfbfb]/30 via-transparent to-[#fbfbfb]/90' },
+  vivid: { opacity: 0.80, gradient: 'from-[#fbfbfb]/30 via-transparent to-[#fbfbfb]/90' },
 };
 
 interface CleanPortfolioProps {
