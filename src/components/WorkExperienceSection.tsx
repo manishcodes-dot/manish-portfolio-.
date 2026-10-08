@@ -54,10 +54,10 @@ export const WorkExperienceSection: React.FC = () => {
             <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold">
               // 05. CAREER &amp; IMPACT
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 mt-1">
+            <h2 className="text-2xl sm:text-3xl sm:text-4xl font-semibold tracking-wide text-zinc-950 mt-1 font-model-plastic">
               Work Experience
             </h2>
-            <p className="text-sm text-zinc-500 mt-1.5 max-w-lg">
+            <p className="text-sm text-zinc-500 mt-1.5 max-w-lg font-kyoto">
               Engineering track record, SEO analysis &amp; copywriting experience, and academic graduation background.
             </p>
           </div>
@@ -119,7 +119,7 @@ export const WorkExperienceSection: React.FC = () => {
                   </div>
 
                   {/* Description paragraph */}
-                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-sans">
+                  <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed font-kyoto">
                     {exp.description}
                   </p>
 

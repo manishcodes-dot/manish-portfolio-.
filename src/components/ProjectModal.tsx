@@ -50,7 +50,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             <h2 className="text-xl sm:text-2xl font-bold text-zinc-950 dark:text-white tracking-tight mb-2">
               {project.title}
             </h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-kyoto">
               {project.tagline}
             </p>
           </div>
@@ -85,7 +85,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               <div className="flex items-center gap-2 text-xs font-mono text-amber-700 dark:text-amber-400 mb-2 font-semibold">
                 <span>[01] The Engineering Challenge</span>
               </div>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-kyoto">
                 {project.problem}
               </p>
             </div>
@@ -94,7 +94,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               <div className="flex items-center gap-2 text-xs font-mono text-emerald-700 dark:text-emerald-400 mb-2 font-semibold">
                 <span>[02] Engineered Architecture</span>
               </div>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-kyoto">
                 {project.solution}
               </p>
             </div>

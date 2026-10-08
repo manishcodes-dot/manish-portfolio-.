@@ -112,10 +112,10 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
             <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold">
               // 04. SELECTED WORKS &amp; CLIENTS
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 mt-1">
+            <h2 className="text-2xl sm:text-3xl sm:text-4xl font-semibold tracking-wide text-zinc-950 mt-1 font-model-plastic">
               Featured Projects
             </h2>
-            <p className="text-sm text-zinc-500 mt-1.5 max-w-lg">
+            <p className="text-sm text-zinc-500 mt-1.5 max-w-lg font-kyoto">
               I’ve helped businesses and founders build high-converting web applications, digital showrooms, and reliable systems. Hover any project to preview.
             </p>
           </div>
@@ -182,7 +182,7 @@ export const GrigolettiProjectsSection: React.FC<GrigolettiProjectsSectionProps>
                         <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
                           {project.title}
                         </h3>
-                        <p className="text-xs sm:text-sm text-zinc-400 mt-2 max-w-xl leading-relaxed font-sans">
+                        <p className="text-xs sm:text-sm text-zinc-400 mt-2 max-w-xl leading-relaxed font-kyoto">
                           {project.description}
                         </p>
                       </div>

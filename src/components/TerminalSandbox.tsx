@@ -246,10 +246,10 @@ EXPERIENCE:
               <span>03 // INTERACTIVE ENVIRONMENT</span>
               <span className="w-12 h-px bg-emerald-500/30" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-wide text-zinc-950 dark:text-white font-model-plastic">
               Interactive Web Developer CLI
             </h2>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 font-kyoto">
               Explore projects, inspect technical competencies, or run simulated diagnostic commands directly in the browser.
             </p>
           </div>

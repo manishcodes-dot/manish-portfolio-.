@@ -138,10 +138,10 @@ export const TechStackShowcase: React.FC = () => {
             <span className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold">
               // 03. TOOLKIT &amp; PROFICIENCIES
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 mt-1">
+            <h2 className="text-2xl sm:text-3xl sm:text-4xl font-semibold tracking-wide text-zinc-950 mt-1 font-model-plastic">
               Technical Stack &amp; Skills
             </h2>
-            <p className="text-sm text-zinc-500 mt-1.5 max-w-lg">
+            <p className="text-sm text-zinc-500 mt-1.5 max-w-lg font-kyoto">
               Primary languages, frameworks, and developer tools used to build reliable web and mobile applications.
             </p>
           </div>

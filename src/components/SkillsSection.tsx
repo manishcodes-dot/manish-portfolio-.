@@ -38,8 +38,8 @@ export const SkillsSection: React.FC = () => {
               <span>02 // TECHNICAL MATRIX</span>
               <span className="w-12 h-px bg-emerald-500/30" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
-              Core Stack & Engineering Proficiencies
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-wide text-zinc-950 dark:text-white font-model-plastic">
+              Core Stack &amp; Engineering Proficiencies
             </h2>
             <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 max-w-2xl">
               Pragmatic, battle-tested technologies applied across high-load micro-services, reactive frontend architectures, and CI/CD automation pipelines.

@@ -31,8 +31,8 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({ onSelectProjec
               <span>01 // SHOWCASE</span>
               <span className="w-12 h-px bg-emerald-500/30" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
-              Engineered Applications & Open Source
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-wide text-zinc-950 dark:text-white font-model-plastic">
+              Engineered Applications &amp; Open Source
             </h2>
             <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 max-w-2xl">
               Production web applications, distributed edge systems, and developer tooling focused on speed, resilience, and clean abstractions.

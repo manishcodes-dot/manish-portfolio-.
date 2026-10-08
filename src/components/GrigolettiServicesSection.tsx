@@ -83,10 +83,10 @@ export const GrigolettiServicesSection: React.FC = () => {
             <span className="block text-xs font-mono uppercase tracking-widest text-zinc-400 font-semibold mb-2">
               // 02. SERVICES &amp; EXPERTISE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-wide text-zinc-950 mt-2 mb-3">
+            <h2 className="text-2xl sm:text-3xl sm:text-4xl font-semibold tracking-wide text-zinc-950 mt-2 mb-3 font-model-plastic">
               {"What I Can Do For You"}
             </h2>
-            <p className="text-sm text-zinc-500 mt-2 max-w-lg leading-relaxed">
+            <p className="text-sm text-zinc-500 mt-2 max-w-lg leading-relaxed font-kyoto">
               Crafting robust digital solutions from architectural conceptualization to high-performance production releases.
             </p>
           </div>
@@ -180,7 +180,7 @@ export const GrigolettiServicesSection: React.FC = () => {
                             <span className="text-zinc-400 font-semibold shrink-0">
                               {sub.number}
                             </span>
-                            <span className="text-sm font-sans font-medium text-zinc-800">
+                            <span className="text-sm font-kyoto font-medium text-zinc-800">
                               {sub.label}
                             </span>
                           </div>

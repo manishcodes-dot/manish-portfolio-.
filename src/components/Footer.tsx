@@ -29,8 +29,8 @@ export const Footer: React.FC = () => {
               <Terminal className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>{PERSONAL_INFO.name} // {PERSONAL_INFO.handle}</span>
             </div>
-            <p className="text-[11px] text-zinc-500 text-center md:text-left">
-              Crafted with TypeScript, React 19 & Tailwind CSS. Zero bloat.
+            <p className="text-[11px] text-zinc-500 text-center md:text-left font-kyoto">
+              Crafted with TypeScript, React 19 &amp; Tailwind CSS. Zero bloat.
             </p>
           </div>
 

@@ -51,9 +51,9 @@ export const ContactSection: React.FC = () => {
     <section id="contact" className="py-20 border-t border-zinc-200/80 dark:border-zinc-900 scroll-mt-16 relative overflow-hidden bg-white dark:bg-zinc-950 select-none">
       {/* Layer 0: Revealed Background Image */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <img 
-          src="/assets/img/contant bg.png" 
-          alt="Contact background" 
+        <img
+          src="/assets/img/contant bg.png"
+          alt="Contact background"
           className="w-full h-full object-cover object-center"
         />
       </div>
@@ -73,10 +73,10 @@ export const ContactSection: React.FC = () => {
             <span>05 // INITIATE TRANSMISSION</span>
             <span className="w-12 h-px bg-emerald-500/30" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-wide text-zinc-950 dark:text-white font-model-plastic">
             Let's Build Something Exceptional
           </h2>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 max-w-2xl">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1 max-w-2xl font-kyoto">
             Have a project in mind, an engineering challenge to solve, or an open senior role? Drop a message or send an email directly.
           </p>
         </div>
@@ -251,11 +251,10 @@ export const ContactSection: React.FC = () => {
                           type="button"
                           key={item.id}
                           onClick={() => setFormData({ ...formData, projectType: item.id })}
-                          className={`py-2 px-2 rounded-lg text-center transition-all ${
-                            formData.projectType === item.id
+                          className={`py-2 px-2 rounded-lg text-center transition-all ${formData.projectType === item.id
                               ? 'bg-zinc-900 text-white dark:bg-zinc-800 dark:text-white border border-zinc-900 dark:border-emerald-500/60 font-medium shadow-xs'
                               : 'bg-zinc-50 dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800 hover:text-zinc-950'
-                          }`}
+                            }`}
                         >
                           {item.label}
                         </button>

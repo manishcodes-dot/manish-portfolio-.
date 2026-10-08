@@ -26,7 +26,6 @@ import { GrigolettiServicesSection } from './GrigolettiServicesSection';
 import { GrigolettiProjectsSection } from './GrigolettiProjectsSection';
 import { TechStackShowcase } from './TechStackShowcase';
 import { WorkExperienceSection } from './WorkExperienceSection';
-import { VideoTextAnimation } from './VideoTextAnimation';
 import InkReveal from '@/components/ui/ink-reveal';
 
 // Helper Tooltip SVG Icons provided by user
@@ -70,11 +69,42 @@ const TooltipGmailIcon: React.FC<{ className?: string }> = ({ className = "w-4 h
   </svg>
 );
 
+// =============================================================================
+// HERO BACKGROUND FADE LEVEL CONFIGURATION
+// Easily change HERO_FADE_LEVEL below (1 to 5, or string name):
+//   - 1 or 'subtle' : 15% opacity (very soft background)
+//   - 2 or 'light'  : 25% opacity (light background texture)
+//   - 3 or 'medium' : 40% opacity (balanced)
+//   - 4 or 'strong' : 60% opacity (pronounced background)
+//   - 5 or 'vivid'  : 80% opacity (Level 5 - Maximum vivid fade visibility)
+// =============================================================================
+export type FadeLevel = 1 | 2 | 3 | 4 | 5 | 'subtle' | 'light' | 'medium' | 'strong' | 'vivid';
+
+export const HERO_FADE_LEVEL: FadeLevel = 5;
+
+const FADE_PRESETS: Record<string | number, { opacity: number; gradient: string }> = {
+  1: { opacity: 0.15, gradient: 'from-[#fbfbfb]/85 via-[#fbfbfb]/50 to-[#fbfbfb]' },
+  2: { opacity: 0.25, gradient: 'from-[#fbfbfb]/75 via-[#fbfbfb]/40 to-[#fbfbfb]' },
+  3: { opacity: 0.40, gradient: 'from-[#fbfbfb]/65 via-[#fbfbfb]/30 to-[#fbfbfb]' },
+  4: { opacity: 0.60, gradient: 'from-[#fbfbfb]/45 via-[#fbfbfb]/20 to-[#fbfbfb]' },
+  5: { opacity: 0.80, gradient: 'from-[#fbfbfb]/30 via-transparent to-[#fbfbfb]/90' },
+  subtle: { opacity: 0.15, gradient: 'from-[#fbfbfb]/85 via-[#fbfbfb]/50 to-[#fbfbfb]' },
+  light:  { opacity: 0.25, gradient: 'from-[#fbfbfb]/75 via-[#fbfbfb]/40 to-[#fbfbfb]' },
+  medium: { opacity: 0.40, gradient: 'from-[#fbfbfb]/65 via-[#fbfbfb]/30 to-[#fbfbfb]' },
+  strong: { opacity: 0.60, gradient: 'from-[#fbfbfb]/45 via-[#fbfbfb]/20 to-[#fbfbfb]' },
+  vivid:  { opacity: 0.80, gradient: 'from-[#fbfbfb]/30 via-transparent to-[#fbfbfb]/90' },
+};
+
 interface CleanPortfolioProps {
   onSelectProject?: (project: Project) => void;
+  heroFadeLevel?: FadeLevel;
 }
 
-export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject }) => {
+export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
+  onSelectProject,
+  heroFadeLevel = HERO_FADE_LEVEL
+}) => {
+  const currentFade = FADE_PRESETS[heroFadeLevel] || FADE_PRESETS.medium;
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [activeProjectFilter, setActiveProjectFilter] = useState<'all' | 'fullstack' | 'frontend' | 'devtools'>('all');
   const [activeSkillCategory, setActiveSkillCategory] = useState<'all' | 'languages' | 'frontend' | 'backend' | 'database' | 'devops'>('all');
@@ -114,26 +144,21 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
   return (
     <div className="w-full flex flex-col items-center">
       {/* =========================================================================
-          1. HERO SECTION (Untouched - EXACTLY preserved as created)
+          1. HERO SECTION
          ========================================================================= */}
       <section id="hero" className="min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-6 relative overflow-hidden">
 
-        {/* Layer 0: Revealed Background Image */}
+        {/* Hero Background Image with Configured Faded Effect */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
           <img
-            src="/assets/img/contant bg.png"
+            src="/assets/img/hero bg.png"
             alt="Hero background"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center scale-105 transition-opacity duration-300"
+            style={{ opacity: currentFade.opacity }}
           />
+          {/* Subtle gradient overlay to smoothly fade image into the section */}
+          <div className={`absolute inset-0 bg-gradient-to-b ${currentFade.gradient} pointer-events-none`} />
         </div>
-
-        {/* Layer 1: Interactive Ink Reveal Mask Canvas */}
-        <InkReveal
-          bgImage="/assets/img/hero bg.png"
-          brushSize={140}
-          lifetime={900}
-          className="z-10"
-        />
 
         {/* Subtle geometric dot grid background overlay */}
         <div
@@ -235,36 +260,11 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
           </div>
         </div>
 
-        {/* Center Hero: Preserved Exactly as made */}
+        {/* Center Hero Title */}
         <div className="relative z-10 w-full max-w-3xl flex flex-col items-center text-center">
-
-          {/* Exact Manish Wordmark with 'Hello, I am' over 'M' and video text animation */}
-          <div className="relative inline-flex items-center justify-center select-none">
-            {/* Small 'Hello, I am' positioned 3px above M letter at 50px left */}
-            <span
-              className="absolute font-mono text-zinc-500 tracking-tight select-text z-10"
-              style={{
-                bottom: 'calc(100% + 3px)',
-                left: '50px',
-                fontSize: 'clamp(11px, 1.8vw, 15px)',
-              }}
-            >
-              Hello, I am
-            </span>
-
-            <div className="relative flex items-center justify-center">
-              <VideoTextAnimation className="h-[clamp(110px,21vw,210px)] w-auto object-contain max-w-full" />
-              <h1 className="sr-only">Manish</h1>
-            </div>
-          </div>
-
-          {/* Subtitle centered below logo with 5px gap */}
-          <p
-            className="text-base sm:text-lg md:text-xl font-mono text-zinc-600 tracking-tight text-center"
-            style={{ marginTop: '5px' }}
-          >
-            Web &amp; App Developer
-          </p>
+          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter text-zinc-950 select-none drop-shadow-xs">
+            Manish
+          </h1>
         </div>
 
         {/* Subtle scroll down indicator */}
@@ -333,11 +333,11 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
               <span className="text-xs font-mono uppercase tracking-widest text-zinc-700 font-bold block mb-1">
                 // 06. INITIATE CONTACT
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-950">
+              <h2 className="text-3xl sm:text-4xl font-semibold tracking-wide text-zinc-950 font-model-plastic">
                 Let's Build Something Together
               </h2>
             </div>
-            <p className="text-zinc-800 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium bg-white/80 backdrop-blur-md px-4 py-2 rounded-xl border border-zinc-200/80 shadow-2xs inline-block">
+            <p className="text-zinc-800 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium bg-white/80 backdrop-blur-md px-4 py-2 rounded-xl border border-zinc-200/80 shadow-2xs inline-block font-kyoto">
               Available for full-stack web applications, mobile engineering, systems architecture, or open-source collaboration. Feel free to reach out directly.
             </p>
           </div>
