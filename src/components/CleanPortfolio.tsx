@@ -27,6 +27,7 @@ import { GrigolettiProjectsSection } from './GrigolettiProjectsSection';
 import { TechStackShowcase } from './TechStackShowcase';
 import { WorkExperienceSection } from './WorkExperienceSection';
 import InkReveal from '@/components/ui/ink-reveal';
+import ContributionSkyline from '@/components/ui/contribution-skyline';
 
 // Helper Tooltip SVG Icons provided by user
 const TooltipGithubIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
@@ -112,6 +113,9 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
   // Contact Form State
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSending, setIsSending] = useState(false);
+
+  // Contribution Skyline Hover State (2D plain heatmap by default, 3D on hover)
+  const [skylineView, setSkylineView] = useState<'2d' | '3d'>('2d');
   const [sendSuccess, setSendSuccess] = useState(false);
 
   const handleCopyEmail = () => {
@@ -287,6 +291,30 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
           5. FEATURED PROJECTS SHOWCASE (Grigoletti Hover Interactive Previews)
          ========================================================================= */}
       <GrigolettiProjectsSection onSelectProject={onSelectProject} />
+
+      {/* =========================================================================
+          5.5. CONTRIBUTION SKYLINE (Interactive 2D/3D Hover Transition)
+         ========================================================================= */}
+      <section
+        className="w-full py-16 px-4 sm:px-8 max-w-6xl mx-auto"
+        onMouseEnter={() => setSkylineView('3d')}
+        onMouseLeave={() => setSkylineView('2d')}
+      >
+        <div className="mb-6">
+          <span className="text-xs font-mono uppercase tracking-widest text-zinc-700 font-bold block mb-1">
+            // OPEN SOURCE ACTIVITY
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-wide text-zinc-950 font-model-plastic">
+            GitHub Contribution
+          </h2>
+        </div>
+        <ContributionSkyline
+          palette="github"
+          view={skylineView}
+          onViewChange={setSkylineView}
+          title="GitHub Contribution"
+        />
+      </section>
 
       {/* =========================================================================
           6. EXPERIENCE & CAREER TIMELINE
