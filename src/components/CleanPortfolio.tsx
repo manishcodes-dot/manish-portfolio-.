@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Mail,
   Github,
@@ -27,7 +27,8 @@ import { GrigolettiProjectsSection } from './GrigolettiProjectsSection';
 import { TechStackShowcase } from './TechStackShowcase';
 import { WorkExperienceSection } from './WorkExperienceSection';
 import InkReveal from '@/components/ui/ink-reveal';
-import ContributionSkyline from '@/components/ui/contribution-skyline';
+import ContributionSkyline, { ContributionDay } from '@/components/ui/contribution-skyline';
+import { MANISH_GITHUB_CONTRIBUTIONS } from '../data/githubContributions';
 
 // Helper Tooltip SVG Icons provided by user
 const TooltipGithubIcon: React.FC<{ className?: string }> = ({ className = "w-4 h-4" }) => (
@@ -116,7 +117,24 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
 
   // Contribution Skyline Hover State (2D plain heatmap by default, 3D on hover)
   const [skylineView, setSkylineView] = useState<'2d' | '3d'>('2d');
+  const [githubData, setGithubData] = useState<ContributionDay[] | undefined>(undefined);
   const [sendSuccess, setSendSuccess] = useState(false);
+
+  // Real-time GitHub Contribution Fetch for 'manishcodes-dot'
+  useEffect(() => {
+    fetch('https://github-contributions.vercel.app/api/v1/manishcodes-dot')
+      .then((res) => res.json())
+      .then((res) => {
+        if (res && Array.isArray(res.contributions)) {
+          const formatted: ContributionDay[] = res.contributions.map((item: { date: string; count: number }) => ({
+            date: item.date,
+            count: item.count || 0,
+          }));
+          setGithubData(formatted);
+        }
+      })
+      .catch((err) => console.error('Failed to fetch live GitHub contributions:', err));
+  }, []);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
@@ -309,6 +327,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
           </h2>
         </div>
         <ContributionSkyline
+          data={githubData || MANISH_GITHUB_CONTRIBUTIONS}
           palette="github"
           view={skylineView}
           onViewChange={setSkylineView}

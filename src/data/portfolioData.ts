@@ -10,7 +10,7 @@ export const PERSONAL_INFO = {
   location: 'Bangalore, India (Open to Worldwide Remote)',
   availability: 'Available for high-impact contracts & senior engineering roles',
   status: 'actively-building',
-  github: 'https://github.com',
+  github: 'https://github.com/manishcodes-dot',
   linkedin: 'https://linkedin.com',
   twitter: 'https://x.com',
   npm: 'https://www.npmjs.com',
