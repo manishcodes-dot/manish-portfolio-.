@@ -12,6 +12,15 @@
   --font-dancing: 'Dancing Script', cursive;
 }
 
+.perspective-distant {
+  perspective: 1000px;
+}
+
+.mask-x-from-90 {
+  mask-image: linear-gradient(to right, black 90%, transparent 100%);
+}
+
+
 @layer base {
   html {
     color-scheme: light dark;

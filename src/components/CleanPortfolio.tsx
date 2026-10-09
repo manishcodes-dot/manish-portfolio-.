@@ -282,7 +282,34 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
           </div>
         </div>
 
+        {/* Main Hero Center Content */}
+        <div className="z-10 flex flex-col items-center justify-center text-center max-w-4xl px-4 py-12 select-none">
+          {/* Main Title with Inline Image Card */}
+          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-sans tracking-tight font-medium text-zinc-950 flex items-center justify-center flex-wrap leading-none gap-y-2">
+            <span>Man</span>
+            <span className="inline-flex items-center justify-center mx-2 sm:mx-3 md:mx-4 align-middle group cursor-pointer">
+              <span className="relative overflow-hidden rounded-2xl border border-zinc-200/90 shadow-md bg-zinc-100 p-1 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl group-hover:border-zinc-300">
+                <img
+                  src="/assets/img/manish-person.jpg"
+                  alt="Manish Shrestha / Workspace preview"
+                  className="w-[1.25em] h-[0.75em] sm:w-[1.35em] sm:h-[0.8em] object-cover rounded-xl transition-transform duration-500 group-hover:scale-110"
+                />
+              </span>
+            </span>
+            <span>ish</span>
+          </h1>
 
+          {/* Subtitle Line & Location Tagline */}
+          <div className="mt-8 sm:mt-10 flex flex-col items-center gap-3">
+            <p className="text-xl sm:text-2xl md:text-3xl font-normal text-zinc-800 tracking-tight text-center leading-snug max-w-2xl">
+              Full-stack web developer and<br className="hidden sm:inline" />
+              systems engineer - based in Nepal
+            </p>
+            <div className="font-mono text-sm sm:text-base text-zinc-700 tracking-wider">
+              [ Kathmandu ]
+            </div>
+          </div>
+        </div>
 
         {/* Subtle scroll down indicator */}
         <a
@@ -544,3 +571,4 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({
     </div>
   );
 };
+
