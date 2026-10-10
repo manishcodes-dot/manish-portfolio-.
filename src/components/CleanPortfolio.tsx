@@ -1,353 +1,621 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowUpRight, Check, Copy, Github, Linkedin, Mail, Sparkles } from 'lucide-react';
-import { PERSONAL_INFO, PROJECTS } from '../data/portfolioData';
-import ContributionSkyline, { ContributionDay } from './ui/contribution-skyline';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, Briefcase, Check, ChevronRight, Copy, FolderGit2, Globe, History, Home, Mail, Sparkles } from 'lucide-react';
+import { Dock, DockIcon, Icons } from './ui/dock';
 import { Project } from '../types';
+import ContributionSkyline from './ui/contribution-skyline';
+import { MANISH_GITHUB_CONTRIBUTIONS } from '../data/githubContributions';
 
 interface CleanPortfolioProps {
   onSelectProject?: (project: Project) => void;
 }
 
-// "Things I do" items matching the exact text & minimal layout of the Aceternity template
+const ROLES = ['Full Stack Developer', 'Mobile Developer', 'Custom Designer'];
+
+// "Things I do" items with numbered badges and categorized pill tags (borderless)
 const THINGS_I_DO_ITEMS = [
   {
-    title: 'Websites & SaaS Applications',
-    description: 'Design + Dev studio for fast web platforms, SaaS apps, and scalable web products.',
-    link: '#projects',
-    isExternal: false,
+    number: '01',
+    title: 'Websites & Web Applications',
+    tags: ['SaaS Platforms', 'E-Commerce Stores', 'Landing Pages', 'Custom Web Portals', 'Business Websites', 'Dashboard Apps'],
   },
   {
+    number: '02',
     title: 'Cross-Platform Mobile Apps',
-    description: 'Building native-feel iOS & Android apps with Flutter, React Native, and offline syncing.',
-    link: '#projects',
-    isExternal: false,
+    tags: ['iOS Apps', 'Android Apps', 'Flutter Apps', 'React Native Apps', 'Offline-First Sync'],
   },
   {
-    title: 'Backend Infrastructure & APIs',
-    description: 'Architecting REST & GraphQL microservices, PostgreSQL databases, and Docker pipelines.',
-    link: '#skills',
-    isExternal: false,
-  },
-  {
-    title: 'SEO & Web Performance',
-    description: 'Core Web Vitals tuning, technical SEO indexing, organic rankings, and web accessibility.',
-    link: '#contact',
-    isExternal: false,
+    number: '03',
+    title: 'SEO & Web Performance Tuning',
+    tags: ['Technical SEO', 'Core Web Vitals', 'PageSpeed Tuning', 'Accessibility (a11y)', 'Analytics & Indexing'],
   },
 ];
 
-// Companies & Work Experience
-const COMPANIES_I_WORKED_WITH = [
+// Work Experience matching Dillion Verma / Magic UI reference site layout
+const WORK_EXPERIENCE = [
   {
-    name: 'Fishtail Tech',
-    role: 'Full-Stack Software Engineer',
-    description: 'Engineered web applications, API microservices, and cross-platform mobile systems.',
-    period: '2024 - Present',
+    name: 'Atomic Finance',
+    role: 'Bitcoin Protocol Engineer',
+    period: 'May 2021 - Oct 2022',
+    description: 'Built decentralized Bitcoin protocol layers, DLC smart contracts, and high-frequency trading integrations.',
+    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/atomic.png',
+    initials: 'AF',
+    technologies: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker'],
   },
   {
-    name: 'Informatics',
-    role: 'Web & Systems Developer',
-    description: 'Built high-performance web platforms, database schemas, and client management tools.',
-    period: '2022 - 2024',
+    name: 'Shopify',
+    role: 'Software Engineer',
+    period: 'January 2021 - April 2021',
+    description: 'Developed core merchant platform features, high-scale GraphQL APIs, and storefront optimization.',
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/shopify/shopify-original.svg',
+    initials: 'SP',
+    technologies: ['Ruby', 'Rails', 'GraphQL', 'React', 'TypeScript'],
   },
   {
-    name: 'Open Source & Freelance Studio',
-    role: 'Independent Developer',
-    description: 'Delivering end-to-end full-stack software and developer tools for global clients.',
-    period: '2020 - Present',
+    name: 'Nvidia',
+    role: 'Software Engineer',
+    period: 'January 2020 - April 2020',
+    description: 'Optimized CUDA compute kernels, deep learning pipelines, and GPU driver performance.',
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nvidia/nvidia-original.svg',
+    initials: 'NV',
+    technologies: ['C++', 'CUDA', 'Python', 'PyTorch', 'Linux'],
+  },
+  {
+    name: 'Splunk',
+    role: 'Software Engineer',
+    period: 'January 2019 - April 2019',
+    description: 'Engineered log indexing engines, real-time analytics streaming, and enterprise dashboards.',
+    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/splunk.svg',
+    initials: 'SL',
+    technologies: ['Python', 'Go', 'React', 'Docker', 'Kubernetes'],
+  },
+  {
+    name: 'Lime',
+    role: 'Software Engineer',
+    period: 'January 2018 - April 2018',
+    description: 'Built IoT fleet tracking software, real-time location telemetry, and mobile payment APIs.',
+    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/lime.svg',
+    initials: 'LM',
+    technologies: ['Node.js', 'React Native', 'PostgreSQL', 'AWS', 'Redis'],
+  },
+  {
+    name: 'Mitre Media',
+    role: 'Software Engineer',
+    period: 'May 2017 - August 2017',
+    description: 'Built financial media analytics tools, content recommendation engines, and ad tech pipelines.',
+    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/mitremedia.png',
+    initials: 'MM',
+    technologies: ['Ruby', 'JavaScript', 'PostgreSQL', 'Elasticsearch'],
   },
 ];
 
-export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject }) => {
+// Tech stack SVG icon mapping (from Devicon / thesvg.org CDN)
+const TECH_ICONS: Record<string, string> = {
+  'React': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+  'Next.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
+  'Typescript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+  'TypeScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+  'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+  'Python': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+  'Go': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',
+  'Postgres': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+  'PostgreSQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+  'Docker': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+  'Kubernetes': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
+  'Java': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+  'C++': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+  'Ruby': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg',
+  'Rails': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rails/rails-plain.svg',
+  'GraphQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg',
+  'CUDA': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nvidia/nvidia-original.svg',
+  'PyTorch': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
+  'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+  'React Native': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+  'AWS': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg',
+  'Redis': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
+  'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+  'Elasticsearch': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg',
+  'TailwindCSS': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
+  'Vue.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+  'Nuxt.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg',
+  'HTML5': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+  'CSS3': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
+};
+
+// Education matching Dillion Verma / Magic UI reference site
+const EDUCATION_ITEMS = [
+  {
+    name: 'Buildspace',
+    degree: 's3, s4, sf1, s5',
+    period: '2023 - 2024',
+    initials: 'BS',
+  },
+  {
+    name: 'University of Waterloo',
+    degree: "Bachelor's Degree of Computer Science (BCS)",
+    period: '2016 - 2021',
+    initials: 'UW',
+  },
+  {
+    name: 'Wilfrid Laurier University',
+    degree: "Bachelor's Degree of Business Administration (BBA)",
+    period: '2016 - 2021',
+    initials: 'WLU',
+  },
+  {
+    name: 'International Baccalaureate',
+    degree: 'IB Diploma',
+    period: '2012 - 2016',
+    initials: 'IB',
+  },
+];
+
+// Skills matching exact reference screenshot
+const SKILLS = [
+  'React',
+  'Next.js',
+  'Typescript',
+  'Node.js',
+  'Python',
+  'Go',
+  'Postgres',
+  'Docker',
+  'Kubernetes',
+  'Java',
+  'C++',
+];
+
+// Projects matching user netlify links ("Projects I done")
+const REFERENCE_PROJECTS = [
+  {
+    id: 'crema-co',
+    title: 'Crema & Co.',
+    description: 'A premium web experience for artisanal coffee roasters featuring interactive customization wizards and floating controls.',
+    image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
+    iframeUrl: 'https://test12418.netlify.app/',
+    technologies: ['React', 'TailwindCSS', 'TypeScript'],
+    link: 'https://test12418.netlify.app/',
+  },
+  {
+    id: 'gokyo-bistro',
+    title: 'Gokyo Bistro',
+    description: 'Premier dining experience and online booking platform for Gokyo Bistro in Jhamsikhel with live availability checking.',
+    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+    iframeUrl: 'https://cheery-pegasus-71d26c.netlify.app/',
+    technologies: ['HTML5', 'CSS3', 'JavaScript'],
+    link: 'https://cheery-pegasus-71d26c.netlify.app/',
+  },
+];
+
+const CONTACT_EMAIL = 'dillion@verma.io';
+const GITHUB_URL = 'https://github.com/dillionverma';
+
+export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [githubData, setGithubData] = useState<ContributionDay[] | undefined>(undefined);
+  const [activeSection, setActiveSection] = useState<string>('hero');
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [expandedWorkIdx, setExpandedWorkIdx] = useState<number | null>(0);
   const [skylineView, setSkylineView] = useState<'2d' | '3d'>('2d');
+  const [isDockVisible, setIsDockVisible] = useState(true);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastScrollYRef = useRef<number>(0);
 
-  // Fetch live GitHub contribution data for 'manishcodes-dot'
   useEffect(() => {
-    fetch('https://github-contributions.vercel.app/api/v1/manishcodes-dot')
-      .then((res) => res.json())
-      .then((res) => {
-        if (res && Array.isArray(res.contributions)) {
-          const formatted: ContributionDay[] = res.contributions.map((item: { date: string; count: number }) => ({
-            date: item.date,
-            count: item.count || 0,
-          }));
-          setGithubData(formatted);
+    const roleTimer = setInterval(() => {
+      setRoleIndex((prevIndex) => (prevIndex + 1) % ROLES.length);
+    }, 3000);
+    return () => clearInterval(roleTimer);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Hide dock whenever user is actively scrolling (UP or DOWN)
+      setIsDockVisible(false);
+
+      // Reveal dock 80ms after scrolling movement stops completely
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsDockVisible(true);
+      }, 80);
+
+      // Active section spy
+      const sections = ['hero', 'about', 'services', 'projects', 'contributions', 'work', 'education', 'skills', 'contact'];
+      const scrollPos = window.scrollY + 220;
+
+      for (const sectionId of sections) {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            setActiveSection(sectionId);
+            break;
+          }
         }
-      })
-      .catch((err) => console.error('Failed to fetch live GitHub contributions:', err));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, []);
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText(PERSONAL_INFO.email);
+    navigator.clipboard.writeText(CONTACT_EMAIL);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
   return (
     <div className="w-full bg-white text-zinc-950 selection:bg-zinc-900 selection:text-white font-sans antialiased min-h-screen">
-      {/* Centered Single Column Master Container (Aceternity Minimalist Architecture) */}
-      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-12 sm:py-20 space-y-14">
+      {/* Centered Container matching Reference Design */}
+      <main className="max-w-3xl mx-auto px-4 sm:px-6 pt-12 sm:pt-20 pb-28 sm:pb-36 space-y-12">
 
         {/* =========================================================================
-            1. HERO & HEADER SECTION (Aceternity Minimalist Header)
+            1. HERO HEADER SECTION (Exact Screenshot Design)
            ========================================================================= */}
-        <header id="hero" className="space-y-6">
-          {/* Header Title & Subtitle */}
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-950 font-model-plastic">
-              Manish Shrestha
+        <header id="hero" className="space-y-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-3.5">
+            <img
+              src="/assets/img/my img.webp"
+              alt="Manish Rana"
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-cover shadow-sm border border-zinc-200/90 shrink-0"
+            />
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950">
+              Manish Rana
             </h1>
-
-            {/* Navigation & Social Shortcuts Row (Directly after name) */}
-            <nav className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-zinc-600 font-medium mt-3 mb-4">
-              <a href="#hero" className="hover:text-zinc-950 transition-colors">
-                Home
-              </a>
-              <span className="text-zinc-300">•</span>
-              <a href="#services" className="hover:text-zinc-950 transition-colors">
-                Things I do
-              </a>
-              <span className="text-zinc-300">•</span>
-              <a href="#projects" className="hover:text-zinc-950 transition-colors">
-                Projects
-              </a>
-              <span className="text-zinc-300">•</span>
-              <a href="#experience" className="hover:text-zinc-950 transition-colors">
-                Experience
-              </a>
-              <span className="text-zinc-300">•</span>
-              <a href="#contact" className="hover:text-zinc-950 transition-colors">
-                Contact
-              </a>
-              <span className="text-zinc-300">•</span>
-              {PERSONAL_INFO.github && (
-                <a
-                  href={PERSONAL_INFO.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-zinc-950 transition-colors inline-flex items-center gap-1"
+            <span className="inline-flex items-center px-3.5 py-1 rounded-xl border border-zinc-300/80 bg-white text-zinc-700 text-xs sm:text-sm font-medium shadow-xs overflow-hidden h-7 sm:h-8">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={ROLES[roleIndex]}
+                  initial={{ y: 12, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -12, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="inline-block whitespace-nowrap"
                 >
-                  GitHub <ArrowUpRight className="w-3 h-3 text-zinc-400" />
-                </a>
-              )}
-            </nav>
-
-            {/* Bio Paragraphs */}
-            <div className="text-sm sm:text-base text-zinc-600 font-normal leading-relaxed space-y-3">
-              <p>
-                I'm a software engineer at heart, tinkering with AI and code almost 90% of the time. I'm mostly active on{' '}
-                <a
-                  href="https://x.com/mannupaaji"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-zinc-950 font-medium underline underline-offset-4 decoration-zinc-300 hover:decoration-zinc-950 transition-colors"
-                >
-                  X / Twitter
-                </a>{' '}
-                where I share everything.
-              </p>
-              <p>
-                When I'm not coding, I usually talk about Design Engineering, AI Tools and Front-end design taste at my{' '}
-                <a
-                  href="https://www.youtube.com/@manuarora"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-zinc-950 font-medium underline underline-offset-4 decoration-zinc-300 hover:decoration-zinc-950 transition-colors"
-                >
-                  YouTube Channel.
-                </a>
-              </p>
-              <p>
-                I've been building my own component library{' '}
-                <a
-                  href="https://ui.aceternity.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-zinc-950 font-medium underline underline-offset-4 decoration-zinc-300 hover:decoration-zinc-950 transition-colors"
-                >
-                  Aceternity UI
-                </a>{' '}
-                for the past 4 years. It has got around 3M page views and 200k unique visitors a month. My favourite thing is to update this library everyday with new components and features.
-              </p>
-            </div>
-          </div>
-
-        {/* Top-Right Corner Badge: Fixed size Live Availability Status */}
-        <a
-          href="#contact"
-          className="fixed top-6 right-6 sm:top-8 sm:right-10 flex items-center gap-2.5 font-mono text-[11px] text-zinc-700 bg-white/90 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-emerald-500/30 hover:border-emerald-500/60 shadow-xs hover:shadow-emerald-500/15 transition-all duration-300 cursor-pointer select-none group focus:outline-none focus:ring-2 focus:ring-emerald-500/40 z-50 shrink-0 whitespace-nowrap"
-        >
-          <span className="relative flex h-2.5 w-2.5 items-center justify-center shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-          </span>
-          <span className="group-hover:text-emerald-950 transition-colors font-medium">Available for Projects</span>
-        </a>
-        </header>
-
-        {/* Hairline Divider */}
-        <div className="w-full h-px bg-zinc-200/80" />
-
-        {/* =========================================================================
-            2. THINGS I DO SECTION (Exact Aceternity Minimalist Row Layout)
-           ========================================================================= */}
-        <section id="services" className="space-y-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
-            Things I do
-          </h2>
-
-          <div className="space-y-1">
-            {THINGS_I_DO_ITEMS.map((item, idx) => (
-              <a
-                key={idx}
-                href={item.link}
-                className="block group p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-xl hover:bg-zinc-100/70 transition-colors duration-200 cursor-pointer border border-transparent hover:border-zinc-200/60"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-950 group-hover:text-zinc-900 transition-colors tracking-tight">
-                    {item.title}
-                  </h3>
-                  <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-zinc-950 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
-                <p className="text-sm text-zinc-600 font-normal leading-relaxed mt-0.5">
-                  {item.description}
-                </p>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {/* Hairline Divider */}
-        <div className="w-full h-px bg-zinc-200/80" />
-
-        {/* =========================================================================
-            3. COMPANIES I'VE WORKED WITH (Experience Section)
-           ========================================================================= */}
-        <section id="experience" className="space-y-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
-            Companies I've worked with
-          </h2>
-
-          <div className="space-y-4">
-            {COMPANIES_I_WORKED_WITH.map((company, idx) => (
-              <div
-                key={idx}
-                className="p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-xl hover:bg-zinc-100/70 transition-colors border border-transparent hover:border-zinc-200/60"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight">
-                    {company.name}
-                  </h3>
-                  <span className="text-xs font-mono text-zinc-400">
-                    {company.period}
-                  </span>
-                </div>
-                <div className="text-xs font-medium text-zinc-700 mt-0.5">
-                  {company.role}
-                </div>
-                <p className="text-sm text-zinc-600 font-normal leading-relaxed mt-1">
-                  {company.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Hairline Divider */}
-        <div className="w-full h-px bg-zinc-200/80" />
-
-        {/* =========================================================================
-            4. FEATURED PROJECTS SECTION (Aceternity Minimalist Works)
-           ========================================================================= */}
-        <section id="projects" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
-              Featured Projects
-            </h2>
-            <span className="text-xs font-mono text-zinc-400">
-              // SELECTED WORKS
+                  {ROLES[roleIndex]}
+                </motion.span>
+              </AnimatePresence>
             </span>
           </div>
 
-          <div className="space-y-3">
-            {PROJECTS.map((project) => (
-              <div
-                key={project.id}
-                onClick={() => onSelectProject && onSelectProject(project)}
-                className="group p-4 -mx-3 sm:-mx-4 rounded-xl hover:bg-zinc-100/70 border border-transparent hover:border-zinc-200/60 transition-all duration-200 cursor-pointer"
-              >
-                <div className="flex items-center justify-between gap-4 mb-1">
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-950 group-hover:text-zinc-900 transition-colors tracking-tight flex items-center gap-2">
-                    <span>{project.title}</span>
-                    <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-zinc-950 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                  </h3>
-                  <span className="text-xs font-mono text-zinc-400 shrink-0">
-                    {project.year}
-                  </span>
+          <p className="text-base sm:text-lg text-zinc-600 font-normal leading-relaxed max-w-[650px]">
+            Software engineer with an eye for design. I love building fast web products, scaling SaaS applications, and helping people bring their ideas to life.
+          </p>
+
+          {/* Availability Status Badge */}
+          <a
+            href="#contact"
+            className="fixed top-6 right-6 sm:top-8 sm:right-10 flex items-center gap-2.5 font-mono text-[11px] text-zinc-700 bg-white/90 backdrop-blur-md px-3.5 py-1 rounded-xl border border-zinc-300/80 hover:border-zinc-400 shadow-xs transition-all duration-300 cursor-pointer select-none group focus:outline-none focus:ring-2 focus:ring-emerald-500/40 z-50 shrink-0 whitespace-nowrap"
+          >
+            <span className="relative flex h-2.5 w-2.5 items-center justify-center shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+            </span>
+            <span className="group-hover:text-emerald-950 transition-colors font-medium">Available for Projects</span>
+          </a>
+        </header>
+
+        {/* =========================================================================
+            2. ABOUT SECTION
+           ========================================================================= */}
+        <section id="about" className="space-y-3">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
+            About
+          </h2>
+          <div className="text-sm sm:text-base text-zinc-600 font-normal leading-relaxed space-y-3">
+            <p>
+              At the end of 2022, I quit my job as a software engineer to go fulltime into building and scaling my own SaaS businesses. In the past, I pursued a double degree in computer science and business, interned at big tech companies in Silicon Valley, and competed in over 21 hackathons for fun. I also had the pleasure of being a part of the first ever in-person cohort of buildspace called <a href="https://buildspace.so/sf1" target="_blank" rel="noreferrer" className="text-zinc-950 font-medium underline underline-offset-4 decoration-zinc-300 hover:decoration-zinc-950 transition-colors">buildspace sf1</a>.
+            </p>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            THINGS I DO SECTION
+           ========================================================================= */}
+        <section id="services" className="space-y-4">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
+            Things I do
+          </h2>
+
+          <div className="relative space-y-6 pt-1">
+            {/* Timeline vertical line running down through the numbers column */}
+            <div className="absolute left-[20px] top-3 bottom-3 w-px bg-zinc-200/90 z-0" />
+
+            {THINGS_I_DO_ITEMS.map((item, idx) => (
+              <div key={idx} className="relative z-10 flex items-baseline gap-3.5 sm:gap-4">
+                {/* Number node with dot, baseline aligned with title text */}
+                <div className="flex items-baseline justify-center shrink-0 min-w-[40px] bg-white text-zinc-950 font-bold font-model-plastic text-base sm:text-lg select-none z-10">
+                  {item.number}.
                 </div>
 
-                <p className="text-sm text-zinc-600 font-normal leading-relaxed">
-                  {project.tagline || project.description}
-                </p>
-
-                {/* Tech Pills */}
-                <div className="flex flex-wrap gap-1.5 mt-3">
-                  {project.technologies.slice(0, 5).map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-0.5 rounded-md bg-zinc-100 text-[11px] font-mono text-zinc-600 border border-zinc-200/60 font-medium"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                <div className="flex-1 min-w-0 space-y-2">
+                  <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight">
+                    {item.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {item.tags.map((tag, tagIdx) => (
+                      <span
+                        key={tagIdx}
+                        className="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-medium bg-zinc-50 border border-zinc-200/90 text-zinc-700 shadow-2xs"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Hairline Divider */}
-        <div className="w-full h-px bg-zinc-200/80" />
+        {/* =========================================================================
+            PROJECTS SECTION (Projects I done)
+           ========================================================================= */}
+        <section id="projects" className="space-y-5">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
+            Projects I done
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+            {REFERENCE_PROJECTS.map((project) => (
+              <a
+                key={project.id}
+                href={project.link || '#'}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex flex-col cursor-pointer"
+              >
+                {/* Banner / Live Website Preview Container (Borderless & Full-Bleed) */}
+                <div className="relative w-full aspect-16/10 rounded-2xl bg-zinc-100 overflow-hidden shadow-xs flex items-center justify-center group-hover:scale-[1.02] transition-transform duration-300">
+                  {project.iframeUrl ? (
+                    <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none rounded-2xl bg-white">
+                      <iframe
+                        src={project.iframeUrl}
+                        title={project.title}
+                        className="w-[350%] h-[350%] origin-top-left scale-[0.285714] border-0 pointer-events-none select-none"
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover rounded-2xl"
+                    />
+                  )}
+                </div>
+
+                {/* Title Below Card */}
+                <h3 className="text-base sm:text-lg font-semibold text-zinc-950 tracking-tight mt-3 group-hover:text-zinc-800 transition-colors">
+                  {project.title}
+                </h3>
+
+                {/* Description Below Title */}
+                <p className="text-xs sm:text-sm text-zinc-500 font-normal leading-relaxed mt-1">
+                  {project.description}
+                </p>
+
+                {/* Tech SVG Icon Row with Smooth Right-Side Expansion */}
+                <div className="flex flex-wrap items-center gap-1.5 mt-3">
+                  {project.technologies.map((tech, tIdx) => {
+                    const iconUrl = TECH_ICONS[tech];
+                    return (
+                      <div
+                        key={tIdx}
+                        className="group/tech inline-flex items-center h-7 w-7 hover:w-auto px-1.5 rounded-full border border-zinc-200/80 bg-zinc-50/90 hover:bg-white hover:border-zinc-300 shadow-2xs transition-all duration-300 ease-in-out overflow-hidden cursor-pointer select-none shrink-0"
+                      >
+                        <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                          {iconUrl ? (
+                            <img src={iconUrl} alt={tech} className="w-3.5 h-3.5 object-contain shrink-0" />
+                          ) : (
+                            <span className="text-[9px] font-bold text-zinc-700 shrink-0">{tech.slice(0, 2)}</span>
+                          )}
+                        </div>
+                        <span className="max-w-0 opacity-0 group-hover/tech:max-w-[140px] group-hover/tech:opacity-100 group-hover/tech:ml-1.5 text-[11px] font-mono font-medium text-zinc-700 whitespace-nowrap transition-all duration-300 ease-in-out pr-1 shrink-0">
+                          {tech}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
 
         {/* =========================================================================
-            5. GITHUB ACTIVITY SECTION
+            GITHUB CONTRIBUTION HEATMAP & 3D SKYLINE SECTION (Hover for 3D)
            ========================================================================= */}
-        <section id="activity" className="space-y-3">
+        <section id="contributions" className="space-y-4 pt-2">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
-            Open Source Activity
+            GitHub Contributions
           </h2>
-          <div className="p-2 sm:p-3 rounded-xl border border-zinc-200/80 bg-zinc-50/50 overflow-hidden">
+          <div
+            onMouseEnter={() => setSkylineView('3d')}
+            onMouseLeave={() => setSkylineView('2d')}
+            className="w-full transition-all duration-300"
+          >
             <ContributionSkyline
-              data={githubData}
-              palette="github"
+              data={MANISH_GITHUB_CONTRIBUTIONS}
               view={skylineView}
-              onViewChange={setSkylineView}
-              title={null}
-              footer={null}
-              showStats={false}
-              showLegend={false}
-              heightScale={0.55}
-              className="border-0 p-0 bg-transparent shadow-none"
+              onViewChange={(v) => setSkylineView(v)}
             />
           </div>
         </section>
 
-        {/* Hairline Divider */}
-        <div className="w-full h-px bg-zinc-200/80" />
+        {/* =========================================================================
+            3. WORK EXPERIENCE SECTION (Exact Screenshot Design)
+           ========================================================================= */}
+        <section id="work" className="space-y-4">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
+            Work Experience
+          </h2>
+
+          <div className="space-y-3">
+            {WORK_EXPERIENCE.map((company, idx) => {
+              const isExpanded = expandedWorkIdx === idx;
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setExpandedWorkIdx(isExpanded ? null : idx)}
+                  className="group flex flex-col p-2.5 sm:p-3 -mx-2 sm:-mx-3 rounded-2xl hover:bg-zinc-100/70 transition-all duration-200 cursor-pointer space-y-2 select-none"
+                >
+                  {/* Main Row: Circle Logo on Left, Company & Role + Chevron in Middle, Date on Far Right */}
+                  <div className="flex items-center justify-between gap-4 w-full">
+                    <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+                      {/* Circle Logo Badge */}
+                      <div className="w-12 h-12 rounded-full border border-zinc-200/90 bg-white flex items-center justify-center p-2 shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors">
+                        {company.logo ? (
+                          <img
+                            src={company.logo}
+                            alt={company.name}
+                            className="w-full h-full object-contain rounded-full"
+                          />
+                        ) : (
+                          <span className="font-bold text-xs font-mono text-zinc-800">{company.initials}</span>
+                        )}
+                      </div>
+
+                      {/* Company Name with Chevron & Role */}
+                      <div className="min-w-0 space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight font-model-plastic leading-snug">
+                            {company.name}
+                          </h3>
+                          <ChevronRight
+                            className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-200 ${
+                              isExpanded ? '-rotate-90 text-zinc-800' : 'rotate-0'
+                            }`}
+                          />
+                        </div>
+                        <p className="text-xs sm:text-sm text-zinc-500 font-normal leading-tight">
+                          {company.role}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Far Right Date Period */}
+                    <span className="text-xs sm:text-sm text-zinc-400 font-normal shrink-0 ml-4 tabular-nums">
+                      {company.period}
+                    </span>
+                  </div>
+
+                  {/* Revealed Description & Tech Stack Badges when Expanded */}
+                  {isExpanded && (
+                    <div className="pl-[61px] space-y-2.5 pt-1 transition-all duration-200">
+                      <p className="text-xs sm:text-sm text-zinc-600 font-normal leading-relaxed">
+                        {company.description}
+                      </p>
+                      {company.technologies && company.technologies.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-2 pt-1">
+                          {company.technologies.map((tech, techIdx) => {
+                            const iconUrl = TECH_ICONS[tech];
+                            return (
+                              <div
+                                key={techIdx}
+                                className="group/tech inline-flex items-center h-7 w-7 hover:w-auto px-1.5 rounded-full border border-zinc-200/80 bg-zinc-50/90 hover:bg-white hover:border-zinc-300 shadow-2xs transition-all duration-300 ease-in-out overflow-hidden cursor-pointer select-none shrink-0"
+                              >
+                                <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                                  {iconUrl ? (
+                                    <img src={iconUrl} alt={tech} className="w-3.5 h-3.5 object-contain shrink-0" />
+                                  ) : (
+                                    <span className="text-[9px] font-bold text-zinc-700 shrink-0">{tech.slice(0, 2)}</span>
+                                  )}
+                                </div>
+                                <span className="max-w-0 opacity-0 group-hover/tech:max-w-[140px] group-hover/tech:opacity-100 group-hover/tech:ml-1.5 text-[11px] font-mono font-medium text-zinc-700 whitespace-nowrap transition-all duration-300 ease-in-out pr-1 shrink-0">
+                                  {tech}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         {/* =========================================================================
-            6. WORK WITH ME / CONTACT SECTION
+            4. EDUCATION SECTION
+           ========================================================================= */}
+        <section id="education" className="space-y-4">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
+            Education
+          </h2>
+
+          <div className="space-y-2">
+            {EDUCATION_ITEMS.map((edu, idx) => (
+              <div
+                key={idx}
+                className="group flex items-start gap-3.5 p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 transition-all duration-200 border border-transparent hover:border-zinc-200/60"
+              >
+                <div className="w-10 h-10 rounded-full border border-zinc-200/80 bg-white flex items-center justify-center font-bold text-xs font-mono text-zinc-800 shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors mt-0.5">
+                  {edu.initials}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight">
+                      {edu.name}
+                    </h3>
+                    <span className="text-xs font-mono text-zinc-400 tabular-nums shrink-0">
+                      {edu.period}
+                    </span>
+                  </div>
+                  <div className="text-xs font-mono font-medium text-zinc-600 mt-0.5">
+                    {edu.degree}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* =========================================================================
+            5. SKILLS SECTION (Matching Reference Screenshot Design)
+           ========================================================================= */}
+        <section id="skills" className="space-y-4">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
+            Skills
+          </h2>
+          <div className="flex flex-wrap gap-2 sm:gap-2.5 pt-1">
+            {SKILLS.map((skill) => {
+              const iconUrl = TECH_ICONS[skill];
+              return (
+                <div
+                  key={skill}
+                  className="px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white text-xs sm:text-sm font-bold text-zinc-900 border border-zinc-200/90 shadow-2xs flex items-center gap-1.5 sm:gap-2 hover:border-zinc-300 hover:shadow-xs transition-all duration-200 cursor-default select-none shrink-0"
+                >
+                  {iconUrl ? (
+                    <img src={iconUrl} alt={skill} className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain shrink-0" />
+                  ) : null}
+                  <span>{skill}</span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* =========================================================================
+            7. CONTACT SECTION
            ========================================================================= */}
         <section id="contact" className="space-y-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
             Work with me
           </h2>
 
           <div className="space-y-3">
-            {/* Consultation / Direct Contact */}
-            <div className="p-4 -mx-3 sm:-mx-4 rounded-xl hover:bg-zinc-100/70 border border-transparent hover:border-zinc-200/60 transition-colors">
+            <div className="p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 border border-transparent hover:border-zinc-200/60 transition-colors">
               <div className="flex items-center justify-between gap-4">
                 <h3 className="text-base sm:text-lg font-bold text-zinc-950">
                   Direct Email
@@ -361,47 +629,69 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = ({ onSelectProject 
                 </button>
               </div>
               <a
-                href={`mailto:${PERSONAL_INFO.email}`}
-                className="text-sm text-zinc-700 hover:text-zinc-950 font-medium hover:underline block mt-1"
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="text-sm text-zinc-700 hover:text-zinc-950 font-medium hover:underline block mt-1 font-mono"
               >
-                {PERSONAL_INFO.email}
+                {CONTACT_EMAIL}
               </a>
               <p className="text-xs text-zinc-500 mt-1 font-normal">
-                Available for full-stack engineering, system architecture, mobile apps, and high-impact contracts.
+                Available for full-stack engineering, system architecture, SaaS building, and high-impact contracts.
               </p>
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            7. FOOTER
+            8. FOOTER
            ========================================================================= */}
-        <footer className="pt-8 border-t border-zinc-200/80 text-xs text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <footer className="pt-8 text-xs text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
-            Built by <span className="font-semibold text-zinc-800">Manish Shrestha</span>. Inspired by Aceternity UI Minimalist Template.
+            Built by <span className="font-semibold text-zinc-800">Dillion Verma</span>. Inspired by Magic UI & Aceternity UI Minimalist Template.
           </div>
           <div className="flex items-center gap-4">
             <a
-              href={PERSONAL_INFO.github}
+              href={GITHUB_URL}
               target="_blank"
               rel="noreferrer"
               className="hover:text-zinc-950 transition-colors"
             >
               GitHub
             </a>
-            <span>•</span>
-            <a
-              href={PERSONAL_INFO.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-zinc-950 transition-colors"
-            >
-              LinkedIn
-            </a>
           </div>
         </footer>
 
       </main>
+
+      {/* Fixed Floating Bottom macOS-style Dock Navbar (Hides on Scroll Down, Reveals Instantly on Scroll Up / Pause) */}
+      <aside
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] transition-all duration-200 ease-out ${
+          isDockVisible
+            ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
+            : 'translate-y-16 opacity-0 scale-95 pointer-events-none'
+        }`}
+      >
+        <Dock direction="middle" className="border border-zinc-200/90 bg-white/95 shadow-xl shadow-zinc-200/50 backdrop-blur-xl">
+          <DockIcon label="Home" href="#hero" isActive={activeSection === 'hero'}>
+            <Home className="size-5 text-current" />
+          </DockIcon>
+          <DockIcon label="Contact" href="#contact" isActive={activeSection === 'contact'}>
+            <Mail className="size-5 text-current" />
+          </DockIcon>
+
+          {/* Separator Divider */}
+          <div className="mx-0.5 sm:mx-1 h-6 w-px bg-zinc-200/90" />
+
+          <DockIcon label="GitHub" href={GITHUB_URL} target="_blank" rel="noreferrer">
+            <Icons.gitHub className="size-5 text-current" />
+          </DockIcon>
+          <DockIcon label="Gmail" href={`mailto:${CONTACT_EMAIL}`}>
+            <Mail className="size-5 text-current" />
+          </DockIcon>
+          <DockIcon label="WhatsApp" href="https://wa.me/" target="_blank" rel="noreferrer">
+            <Icons.whatsapp className="size-5 text-current" />
+          </DockIcon>
+        </Dock>
+      </aside>
     </div>
   );
 };

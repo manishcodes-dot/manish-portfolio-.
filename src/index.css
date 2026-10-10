@@ -26,6 +26,14 @@
     color-scheme: light dark;
   }
 
+  /* Main Headings (h1, h2) use Model Plastic */
+  h1,
+  h2,
+  .font-model-plastic {
+    font-family: 'Model Plastic', 'PP Model Plastic', sans-serif !important;
+  }
+
+  /* Subheadings (h3-h6), Body and general text use PP Kyoto */
   body,
   p,
   span,
@@ -37,8 +45,10 @@
   h3,
   h4,
   h5,
-  h6 {
-    font-family: 'PP Kyoto', var(--font-sans);
+  h6,
+  .font-sans,
+  .font-kyoto {
+    font-family: 'PP Kyoto', var(--font-sans) !important;
   }
 
   code,
@@ -53,11 +63,11 @@
 }
 
 .font-model-plastic {
-  font-family: var(--font-model-plastic) !important;
+  font-family: 'Model Plastic', 'PP Model Plastic', sans-serif !important;
 }
 
 .font-kyoto {
-  font-family: var(--font-kyoto) !important;
+  font-family: 'PP Kyoto', serif !important;
 }
 
 .font-script {
@@ -89,6 +99,22 @@
 /* 1. PP Model Plastic */
 @font-face {
   font-family: 'Model Plastic';
+  src: url('/assets/fonts/PPModelPlastic-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Model Plastic';
+  src: url('/assets/fonts/PPModelPlastic-Light.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Model Plastic';
   src: url('/assets/fonts/PPModelPlastic-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
@@ -113,13 +139,37 @@
 
 @font-face {
   font-family: 'Model Plastic';
-  src: url('/assets/fonts/PPModelPlastic-Light.otf') format('opentype');
-  font-weight: 300;
+  src: url('/assets/fonts/PPModelPlastic-Super.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Model Plastic';
+  src: url('/assets/fonts/PPModelPlastic-Super.otf') format('opentype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 
 /* 2. PP Kyoto */
+@font-face {
+  font-family: 'PP Kyoto';
+  src: url('/assets/fonts/PPKyoto-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Kyoto';
+  src: url('/assets/fonts/PPKyoto-Thin.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'PP Kyoto';
   src: url('/assets/fonts/PPKyoto-Light.otf') format('opentype');
@@ -140,6 +190,38 @@
   font-family: 'PP Kyoto';
   src: url('/assets/fonts/PPKyoto-Medium.otf') format('opentype');
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Kyoto';
+  src: url('/assets/fonts/PPKyoto-Medium.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Kyoto';
+  src: url('/assets/fonts/PPKyoto-Extrabold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Kyoto';
+  src: url('/assets/fonts/PPKyoto-Extrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Kyoto';
+  src: url('/assets/fonts/PPKyoto-Extrabold.otf') format('opentype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }

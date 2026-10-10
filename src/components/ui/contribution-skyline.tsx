@@ -1186,57 +1186,62 @@ export default function ContributionSkyline({
         borderColor: "var(--color-border, #e5e5e5)",
       }}
     >
-      {(title || showToggle) && (
-        <header className="mb-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          {title ? (
-            <h3 className="m-0 text-sm font-medium leading-snug">
-              {title}
-            </h3>
-          ) : <div />}
-          {showToggle && (
-            <div
-              role="group"
-              aria-label="Chart view"
-              className="relative inline-flex rounded-md border p-0.5"
-              style={{ borderColor: "var(--color-border, #e5e5e5)" }}
-            >
-              <span
-                aria-hidden="true"
-                className="absolute top-0.5 bottom-0.5 left-0.5 w-8 rounded transition-transform duration-500 motion-reduce:transition-none"
+      <header className="mb-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        {title ? (
+          <h3 className="m-0 text-sm font-medium leading-snug">
+            {title}
+          </h3>
+        ) : showStats ? (
+          <div className="flex items-center gap-2 font-mono text-xs text-zinc-500">
+            <span className="font-bold text-zinc-950 text-sm">{nf.format(stats.total)}</span>
+            <span>contributions in 1 year</span>
+          </div>
+        ) : (
+          <div />
+        )}
+        {showToggle && (
+          <div
+            role="group"
+            aria-label="Chart view"
+            className="relative inline-flex rounded-md border p-0.5"
+            style={{ borderColor: "var(--color-border, #e5e5e5)" }}
+          >
+            <span
+              aria-hidden="true"
+              className="absolute top-0.5 bottom-0.5 left-0.5 w-8 rounded transition-transform duration-500 motion-reduce:transition-none"
+              style={{
+                background: "var(--color-foreground, #171717)",
+                transform: is3d ? "translateX(100%)" : "translateX(0)",
+                transitionTimingFunction: ease,
+              }}
+            />
+            {(["2d", "3d"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                aria-pressed={view === v}
+                aria-label={v === "2d" ? "Flat heat map" : "3D skyline"}
+                title={v === "2d" ? "Flat heat map" : "3D skyline"}
+                onClick={() => setView(v)}
+                className="relative z-10 grid h-7 w-8 cursor-pointer place-items-center rounded border-0 bg-transparent p-0 transition-colors duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
                 style={{
-                  background: "var(--color-foreground, #171717)",
-                  transform: is3d ? "translateX(100%)" : "translateX(0)",
-                  transitionTimingFunction: ease,
+                  color: view === v ? "var(--color-background, #ffffff)" : MUTED,
+                  outlineColor: "var(--color-foreground, #171717)",
                 }}
-              />
-              {(["2d", "3d"] as const).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  aria-pressed={view === v}
-                  aria-label={v === "2d" ? "Flat heat map" : "3D skyline"}
-                  title={v === "2d" ? "Flat heat map" : "3D skyline"}
-                  onClick={() => setView(v)}
-                  className="relative z-10 grid h-7 w-8 cursor-pointer place-items-center rounded border-0 bg-transparent p-0 transition-colors duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
-                  style={{
-                    color: view === v ? "var(--color-background, #ffffff)" : MUTED,
-                    outlineColor: "var(--color-foreground, #171717)",
-                  }}
-                >
-                  {v === "2d" ? <GridIcon /> : <CubeIcon />}
-                </button>
-              ))}
-            </div>
-          )}
-        </header>
-      )}
+              >
+                {v === "2d" ? <GridIcon /> : <CubeIcon />}
+              </button>
+            ))}
+          </div>
+        )}
+      </header>
 
       <div className="relative rounded-lg">
-        <div className="relative px-3 pt-3 sm:px-4 sm:pt-4">
+        <div className="relative px-1 pt-1 sm:px-2 sm:pt-2">
           <div
             ref={stageRef}
             className="relative w-full overflow-hidden rounded-md outline-offset-4 has-[:focus-visible]:outline-2"
-            style={{ height: 150, outlineColor: "var(--color-foreground, #171717)" }}
+            style={{ height: 130, outlineColor: "var(--color-foreground, #171717)" }}
           >
             <canvas
               ref={canvasRef}
@@ -1249,40 +1254,30 @@ export default function ContributionSkyline({
               className="absolute top-0 left-0 block outline-none"
               style={{ maxWidth: "none", touchAction: is3d && orbit ? "pan-y" : "auto" }}
             />
-
-            {showStats && corners && (
-              <>
-                <div
-                  aria-hidden={!is3d}
-                  className="pointer-events-none absolute top-1 right-1 flex flex-col items-end gap-5 transition-[opacity,transform] motion-reduce:transition-none"
-                  style={{
-                    opacity: is3d ? 1 : 0,
-                    transform: is3d ? "translateY(0)" : "translateY(-10px)",
-                    transitionDuration: is3d ? "600ms" : "300ms",
-                    transitionDelay: is3d ? Math.round(duration * 0.55) + "ms" : "0ms",
-                    transitionTimingFunction: ease,
-                  }}
-                >
-                  <Stat {...statBlocks[0]} accent={theme.accent} size={bigSize} align="end" />
-                  <Stat {...statBlocks[1]} accent={theme.accent} size={bigSize} align="end" />
-                </div>
-                <div
-                  aria-hidden={!is3d}
-                  className="pointer-events-none absolute bottom-1 left-1 flex flex-col items-start gap-5 transition-[opacity,transform] motion-reduce:transition-none"
-                  style={{
-                    opacity: is3d ? 1 : 0,
-                    transform: is3d ? "translateY(0)" : "translateY(10px)",
-                    transitionDuration: is3d ? "600ms" : "300ms",
-                    transitionDelay: is3d ? Math.round(duration * 0.65) + "ms" : "0ms",
-                    transitionTimingFunction: ease,
-                  }}
-                >
-                  <Stat {...statBlocks[2]} accent={theme.accent} size={bigSize} align="start" />
-                  <Stat {...statBlocks[3]} accent={theme.accent} size={bigSize} align="start" />
-                </div>
-              </>
-            )}
           </div>
+
+          {/* Clean minimal 4-stat number row */}
+          {showStats && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3 mt-2 border-t border-zinc-200/70 font-mono">
+              <div>
+                <span className="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold block">Total</span>
+                <span className="text-sm font-bold text-zinc-950">{nf.format(stats.total)}</span>
+              </div>
+              <div>
+                <span className="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold block">Busiest</span>
+                <span className="text-sm font-bold text-zinc-950">{nf.format(stats.busiest.count)}</span>
+              </div>
+              <div>
+                <span className="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold block">Longest</span>
+                <span className="text-sm font-bold text-zinc-950">{nf.format(stats.longest.days)}d</span>
+              </div>
+              <div>
+                <span className="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold block">Streak</span>
+                <span className="text-sm font-bold text-zinc-950">{nf.format(stats.current.days)}d</span>
+              </div>
+            </div>
+          )}
+        </div>
 
           <div
             ref={tipRef}
@@ -1319,35 +1314,7 @@ export default function ContributionSkyline({
           </div>
         </div>
 
-        {showStats && (
-          <div
-            aria-hidden={!showRow}
-            className="grid transition-[grid-template-rows,opacity] motion-reduce:transition-none"
-            style={{
-              gridTemplateRows: showRow ? "1fr" : "0fr",
-              opacity: showRow ? 1 : 0,
-              transitionDuration: duration + "ms",
-              transitionTimingFunction: ease,
-            }}
-          >
-            <div className="min-h-0 overflow-hidden">
-              <div className="grid grid-cols-2 gap-x-4 gap-y-4 px-3 pt-4 pb-1 sm:px-4 md:grid-cols-4">
-                {statBlocks.map((b) => (
-                  <Stat
-                    key={b.label}
-                    label={b.label}
-                    value={b.value}
-                    unit={b.unit}
-                    sub={b.sub}
-                    accent={theme.accent}
-                    size={28}
-                    align="stack"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {(footer !== null || showLegend) && (
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-3 pt-3 pb-3 text-[12px] sm:px-4" style={{ color: MUTED }}>
@@ -1394,7 +1361,6 @@ export default function ContributionSkyline({
             )}
           </div>
         )}
-      </div>
 
       <p aria-live="polite" className="sr-only">
         {announce}
