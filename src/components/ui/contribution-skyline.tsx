@@ -1186,52 +1186,52 @@ export default function ContributionSkyline({
         borderColor: "var(--color-border, #e5e5e5)",
       }}
     >
-      <header className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-        <h3 className="m-0 text-[15px] font-normal leading-snug">
-          {title ?? (
-            <>
-              <span className="font-semibold tabular-nums">{nf.format(stats.total)}</span> {noun(stats.total)} in the last year
-            </>
-          )}
-        </h3>
-        {showToggle && (
-          <div
-            role="group"
-            aria-label="Chart view"
-            className="relative inline-flex rounded-md border p-0.5"
-            style={{ borderColor: "var(--color-border, #e5e5e5)" }}
-          >
-            <span
-              aria-hidden="true"
-              className="absolute top-0.5 bottom-0.5 left-0.5 w-8 rounded transition-transform duration-500 motion-reduce:transition-none"
-              style={{
-                background: "var(--color-foreground, #171717)",
-                transform: is3d ? "translateX(100%)" : "translateX(0)",
-                transitionTimingFunction: ease,
-              }}
-            />
-            {(["2d", "3d"] as const).map((v) => (
-              <button
-                key={v}
-                type="button"
-                aria-pressed={view === v}
-                aria-label={v === "2d" ? "Flat heat map" : "3D skyline"}
-                title={v === "2d" ? "Flat heat map" : "3D skyline"}
-                onClick={() => setView(v)}
-                className="relative z-10 grid h-7 w-8 cursor-pointer place-items-center rounded border-0 bg-transparent p-0 transition-colors duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
+      {(title || showToggle) && (
+        <header className="mb-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          {title ? (
+            <h3 className="m-0 text-sm font-medium leading-snug">
+              {title}
+            </h3>
+          ) : <div />}
+          {showToggle && (
+            <div
+              role="group"
+              aria-label="Chart view"
+              className="relative inline-flex rounded-md border p-0.5"
+              style={{ borderColor: "var(--color-border, #e5e5e5)" }}
+            >
+              <span
+                aria-hidden="true"
+                className="absolute top-0.5 bottom-0.5 left-0.5 w-8 rounded transition-transform duration-500 motion-reduce:transition-none"
                 style={{
-                  color: view === v ? "var(--color-background, #ffffff)" : MUTED,
-                  outlineColor: "var(--color-foreground, #171717)",
+                  background: "var(--color-foreground, #171717)",
+                  transform: is3d ? "translateX(100%)" : "translateX(0)",
+                  transitionTimingFunction: ease,
                 }}
-              >
-                {v === "2d" ? <GridIcon /> : <CubeIcon />}
-              </button>
-            ))}
-          </div>
-        )}
-      </header>
+              />
+              {(["2d", "3d"] as const).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  aria-pressed={view === v}
+                  aria-label={v === "2d" ? "Flat heat map" : "3D skyline"}
+                  title={v === "2d" ? "Flat heat map" : "3D skyline"}
+                  onClick={() => setView(v)}
+                  className="relative z-10 grid h-7 w-8 cursor-pointer place-items-center rounded border-0 bg-transparent p-0 transition-colors duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
+                  style={{
+                    color: view === v ? "var(--color-background, #ffffff)" : MUTED,
+                    outlineColor: "var(--color-foreground, #171717)",
+                  }}
+                >
+                  {v === "2d" ? <GridIcon /> : <CubeIcon />}
+                </button>
+              ))}
+            </div>
+          )}
+        </header>
+      )}
 
-      <div className="relative rounded-lg border" style={{ borderColor: "var(--color-border, #e5e5e5)" }}>
+      <div className="relative rounded-lg">
         <div className="relative px-3 pt-3 sm:px-4 sm:pt-4">
           <div
             ref={stageRef}
@@ -1349,49 +1349,51 @@ export default function ContributionSkyline({
           </div>
         )}
 
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-3 pt-3 pb-3 text-[12px] sm:px-4" style={{ color: MUTED }}>
-          {footer === undefined ? (
-            <span className="relative grid flex-1">
-              {hints.map((h) => (
-                <span
-                  key={h}
-                  aria-hidden={h !== hint}
-                  className="[grid-area:1/1] transition-opacity duration-500 motion-reduce:transition-none"
-                  style={{ opacity: h === hint ? 1 : 0 }}
-                >
-                  {h}
-                </span>
-              ))}
-            </span>
-          ) : (
-            <span className="flex-1">{footer}</span>
-          )}
-          {showLegend && (
-            <div className="flex items-center gap-1.5" onMouseLeave={() => setLegendLevel(-1)}>
-              <span className="mr-0.5">Less</span>
-              {theme.swatches.map((c, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-label={"Highlight " + levelNames[i].toLowerCase() + " days"}
-                  aria-pressed={legendLevel === i}
-                  title={levelNames[i]}
-                  onMouseEnter={() => setLegendLevel(i)}
-                  onFocus={() => setLegendLevel(i)}
-                  onBlur={() => setLegendLevel(-1)}
-                  onClick={() => setLegendLevel((l) => (l === i ? -1 : i))}
-                  className="h-[11px] w-[11px] cursor-pointer rounded-[2px] border-0 p-0 transition-[background-color,transform] duration-500 hover:scale-125 focus-visible:outline-2 focus-visible:outline-offset-1 motion-reduce:transition-none"
-                  style={{
-                    background: c,
-                    outlineColor: "var(--color-foreground, #171717)",
-                    boxShadow: "inset 0 0 0 1px rgba(127,127,127,0.12)",
-                  }}
-                />
-              ))}
-              <span className="ml-0.5">More</span>
-            </div>
-          )}
-        </div>
+        {(footer !== null || showLegend) && (
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-3 pt-3 pb-3 text-[12px] sm:px-4" style={{ color: MUTED }}>
+            {footer === undefined ? (
+              <span className="relative grid flex-1">
+                {hints.map((h) => (
+                  <span
+                    key={h}
+                    aria-hidden={h !== hint}
+                    className="[grid-area:1/1] transition-opacity duration-500 motion-reduce:transition-none"
+                    style={{ opacity: h === hint ? 1 : 0 }}
+                  >
+                    {h}
+                  </span>
+                ))}
+              </span>
+            ) : footer ? (
+              <span className="flex-1">{footer}</span>
+            ) : null}
+            {showLegend && (
+              <div className="flex items-center gap-1.5" onMouseLeave={() => setLegendLevel(-1)}>
+                <span className="mr-0.5">Less</span>
+                {theme.swatches.map((c, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    aria-label={"Highlight " + levelNames[i].toLowerCase() + " days"}
+                    aria-pressed={legendLevel === i}
+                    title={levelNames[i]}
+                    onMouseEnter={() => setLegendLevel(i)}
+                    onFocus={() => setLegendLevel(i)}
+                    onBlur={() => setLegendLevel(-1)}
+                    onClick={() => setLegendLevel((l) => (l === i ? -1 : i))}
+                    className="h-[11px] w-[11px] cursor-pointer rounded-[2px] border-0 p-0 transition-[background-color,transform] duration-500 hover:scale-125 focus-visible:outline-2 focus-visible:outline-offset-1 motion-reduce:transition-none"
+                    style={{
+                      background: c,
+                      outlineColor: "var(--color-foreground, #171717)",
+                      boxShadow: "inset 0 0 0 1px rgba(127,127,127,0.12)",
+                    }}
+                  />
+                ))}
+                <span className="ml-0.5">More</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <p aria-live="polite" className="sr-only">
