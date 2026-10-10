@@ -641,24 +641,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           </div>
         </section>
 
-        {/* =========================================================================
-            8. FOOTER
-           ========================================================================= */}
-        <footer className="pt-8 text-xs text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            Built by <span className="font-semibold text-zinc-800">Dillion Verma</span>. Inspired by Magic UI & Aceternity UI Minimalist Template.
-          </div>
-          <div className="flex items-center gap-4">
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-zinc-950 transition-colors"
-            >
-              GitHub
-            </a>
-          </div>
-        </footer>
+
 
       </main>
 
