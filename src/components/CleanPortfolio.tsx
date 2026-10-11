@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Briefcase, Check, ChevronRight, Copy, FolderGit2, Globe, History, Home, Mail, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Briefcase, Check, ChevronRight, Copy, FolderGit2, Globe, History, Home, Mail, Sparkles, X } from 'lucide-react';
 import { Dock, DockIcon, Icons } from './ui/dock';
 import { Project } from '../types';
 import ContributionSkyline from './ui/contribution-skyline';
@@ -12,157 +13,110 @@ interface CleanPortfolioProps {
 
 const ROLES = ['Full Stack Developer', 'Mobile Developer', 'Custom Designer'];
 
-// "Things I do" items with numbered badges and categorized pill tags (borderless)
+// "Things I do" services matching reference image
 const THINGS_I_DO_ITEMS = [
   {
-    number: '01',
-    title: 'Websites & Web Applications',
-    tags: ['SaaS Platforms', 'E-Commerce Stores', 'Landing Pages', 'Custom Web Portals', 'Business Websites', 'Dashboard Apps'],
+    id: 'webdev',
+    title: 'Web Development',
+    description: 'High-performance websites and modern web applications crafted with responsive interactions, robust architecture, and clean code.',
+    image: '/assets/img/webdev-mockup.jpg',
   },
   {
-    number: '02',
-    title: 'Cross-Platform Mobile Apps',
-    tags: ['iOS Apps', 'Android Apps', 'Flutter Apps', 'React Native Apps', 'Offline-First Sync'],
+    id: 'uiux',
+    title: 'UI and UX Design',
+    description: 'Designing intuitive and scalable interfaces for web dashboards, mobile applications, and design systems.',
+    image: '/assets/img/uiux-mockup.jpg',
   },
   {
-    number: '03',
-    title: 'SEO & Web Performance Tuning',
-    tags: ['Technical SEO', 'Core Web Vitals', 'PageSpeed Tuning', 'Accessibility (a11y)', 'Analytics & Indexing'],
+    id: 'mobile',
+    title: 'Mobile Development',
+    description: 'Cross-platform and native mobile apps built with fluid touch gestures, smooth animations, and high performance.',
+    image: '/assets/img/mobile-mockup.jpg',
+  },
+  {
+    id: 'seo',
+    title: 'SEO',
+    description: 'Search engine optimization, semantic structured markup, technical performance audits, and organic search visibility.',
+    image: '/assets/img/seo-mockup.jpg',
   },
 ];
 
 // Work Experience matching Dillion Verma / Magic UI reference site layout
 const WORK_EXPERIENCE = [
   {
-    name: 'Atomic Finance',
-    role: 'Bitcoin Protocol Engineer',
-    period: 'May 2021 - Oct 2022',
-    description: 'Built decentralized Bitcoin protocol layers, DLC smart contracts, and high-frequency trading integrations.',
-    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/atomic.png',
-    initials: 'AF',
-    technologies: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Docker'],
-  },
-  {
-    name: 'Shopify',
-    role: 'Software Engineer',
-    period: 'January 2021 - April 2021',
-    description: 'Developed core merchant platform features, high-scale GraphQL APIs, and storefront optimization.',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/shopify/shopify-original.svg',
-    initials: 'SP',
-    technologies: ['Ruby', 'Rails', 'GraphQL', 'React', 'TypeScript'],
-  },
-  {
-    name: 'Nvidia',
-    role: 'Software Engineer',
-    period: 'January 2020 - April 2020',
-    description: 'Optimized CUDA compute kernels, deep learning pipelines, and GPU driver performance.',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nvidia/nvidia-original.svg',
-    initials: 'NV',
-    technologies: ['C++', 'CUDA', 'Python', 'PyTorch', 'Linux'],
-  },
-  {
-    name: 'Splunk',
-    role: 'Software Engineer',
-    period: 'January 2019 - April 2019',
-    description: 'Engineered log indexing engines, real-time analytics streaming, and enterprise dashboards.',
-    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/splunk.svg',
-    initials: 'SL',
-    technologies: ['Python', 'Go', 'React', 'Docker', 'Kubernetes'],
-  },
-  {
-    name: 'Lime',
-    role: 'Software Engineer',
-    period: 'January 2018 - April 2018',
-    description: 'Built IoT fleet tracking software, real-time location telemetry, and mobile payment APIs.',
-    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/lime.svg',
-    initials: 'LM',
-    technologies: ['Node.js', 'React Native', 'PostgreSQL', 'AWS', 'Redis'],
-  },
-  {
-    name: 'Mitre Media',
-    role: 'Software Engineer',
-    period: 'May 2017 - August 2017',
-    description: 'Built financial media analytics tools, content recommendation engines, and ad tech pipelines.',
-    logo: 'https://raw.githubusercontent.com/dillionverma/portfolio/main/public/mitremedia.png',
-    initials: 'MM',
-    technologies: ['Ruby', 'JavaScript', 'PostgreSQL', 'Elasticsearch'],
+    name: 'Fishtail Infosolutions',
+    role: 'SEO Analyst & Copywriter',
+    period: 'Mar 2023 - Present',
+    description: 'Analyzing search engine performance, executing technical SEO audits, keyword research, and crafting engaging content strategy to maximize organic search visibility and user conversion.',
+    logo: '/assets/img/fishtail-logo.png',
+    initials: 'FI',
+    technologies: ['SEO', 'JavaScript', 'HTML5', 'CSS3', 'Python'],
   },
 ];
 
 // Tech stack SVG icon mapping (from Devicon / thesvg.org CDN)
 const TECH_ICONS: Record<string, string> = {
+  'Dart': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg',
+  'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
+  'Python': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+  'Flutter': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg',
   'React': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
   'Next.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
-  'Typescript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-  'TypeScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-  'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-  'Python': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-  'Go': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',
-  'Postgres': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-  'PostgreSQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-  'Docker': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-  'Kubernetes': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
-  'Java': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
-  'C++': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
-  'Ruby': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ruby/ruby-original.svg',
-  'Rails': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rails/rails-plain.svg',
-  'GraphQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg',
-  'CUDA': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nvidia/nvidia-original.svg',
-  'PyTorch': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
-  'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
-  'React Native': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-  'AWS': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-plain-wordmark.svg',
-  'Redis': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
-  'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
-  'Elasticsearch': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg',
+  'Redux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg',
+  'Tailwind CSS': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
   'TailwindCSS': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
-  'Vue.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
-  'Nuxt.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg',
+  'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+  'Express': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg',
+  'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+  'MySQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
+  'SQLite': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg',
+  'Redis': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
+  'Firebase': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg',
+  'Docker': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+  'Git': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+  'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+  'Nginx': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg',
+  'NGINX': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg',
+  'SEO': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg',
   'HTML5': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
   'CSS3': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
+  'TypeScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+  'Typescript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
 };
 
-// Education matching Dillion Verma / Magic UI reference site
+// Education matching reference site
 const EDUCATION_ITEMS = [
   {
-    name: 'Buildspace',
-    degree: 's3, s4, sf1, s5',
-    period: '2023 - 2024',
-    initials: 'BS',
-  },
-  {
-    name: 'University of Waterloo',
-    degree: "Bachelor's Degree of Computer Science (BCS)",
-    period: '2016 - 2021',
-    initials: 'UW',
-  },
-  {
-    name: 'Wilfrid Laurier University',
-    degree: "Bachelor's Degree of Business Administration (BBA)",
-    period: '2016 - 2021',
-    initials: 'WLU',
-  },
-  {
-    name: 'International Baccalaureate',
-    degree: 'IB Diploma',
-    period: '2012 - 2016',
-    initials: 'IB',
+    name: 'Informatics College Pokhara',
+    degree: 'Bachelor of Information Technology (BIT)',
+    period: '2021 - 2024',
+    initials: 'ICP',
+    logo: '/assets/img/informatics-logo.svg',
+    link: 'https://icp.edu.np/',
   },
 ];
 
-// Skills matching exact reference screenshot
+// Skills from reference image (Languages, Frontend, Backend & DBs, Tools & Infra)
 const SKILLS = [
+  'Dart',
+  'JavaScript',
+  'Python',
+  'Flutter',
   'React',
   'Next.js',
-  'Typescript',
+  'Redux',
+  'Tailwind CSS',
   'Node.js',
-  'Python',
-  'Go',
-  'Postgres',
+  'Express',
+  'MongoDB',
+  'MySQL',
+  'SQLite',
+  'Redis',
+  'Firebase',
   'Docker',
-  'Kubernetes',
-  'Java',
-  'C++',
+  'Git',
+  'Linux',
+  'Nginx',
 ];
 
 // Projects matching user netlify links ("Projects I done")
@@ -190,15 +144,67 @@ const REFERENCE_PROJECTS = [
 const CONTACT_EMAIL = 'dillion@verma.io';
 const GITHUB_URL = 'https://github.com/dillionverma';
 
+const ProjectCursorFollower: React.FC<{
+  pos: { x: number; y: number } | null;
+}> = ({ pos }) => {
+  if (!pos || typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div
+      style={{
+        position: 'fixed',
+        left: `${pos.x}px`,
+        top: `${pos.y}px`,
+        transform: 'translate(-50%, -50%)',
+        pointerEvents: 'none',
+        zIndex: 999999,
+        transition: 'transform 0.04s ease-out',
+      }}
+      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-950 text-white text-xs font-medium tracking-wide shadow-2xl border border-zinc-700/80 backdrop-blur-md select-none animate-in fade-in zoom-in-75 duration-100"
+    >
+      <span>Visit</span>
+      <ArrowUpRight className="size-3.5 text-zinc-300 stroke-[2]" />
+    </div>,
+    document.body
+  );
+};
+
 export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [roleIndex, setRoleIndex] = useState(0);
-  const [expandedWorkIdx, setExpandedWorkIdx] = useState<number | null>(0);
+  const [expandedWorkIdx, setExpandedWorkIdx] = useState<number | null>(null);
   const [skylineView, setSkylineView] = useState<'2d' | '3d'>('2d');
   const [isDockVisible, setIsDockVisible] = useState(true);
+  const [nameAnimationKey, setNameAnimationKey] = useState(0);
+  const [hoveredService, setHoveredService] = useState<number | null>(null);
+  const [projectCursorPos, setProjectCursorPos] = useState<{ x: number; y: number } | null>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollYRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (!projectCursorPos) return;
+
+    const handleWindowMouseMove = (e: MouseEvent) => {
+      const projectsEl = document.getElementById('projects');
+      if (projectsEl) {
+        const rect = projectsEl.getBoundingClientRect();
+        if (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+        ) {
+          setProjectCursorPos({ x: e.clientX, y: e.clientY });
+          return;
+        }
+      }
+      setProjectCursorPos(null);
+    };
+
+    window.addEventListener('mousemove', handleWindowMouseMove);
+    return () => window.removeEventListener('mousemove', handleWindowMouseMove);
+  }, [projectCursorPos !== null]);
 
   useEffect(() => {
     const roleTimer = setInterval(() => {
@@ -267,8 +273,13 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
               alt="Manish Rana"
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-cover shadow-sm border border-zinc-200/90 shrink-0"
             />
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-zinc-950">
-              Manish Rana
+            <h1
+              key={nameAnimationKey}
+              onClick={() => setNameAnimationKey((k) => k + 1)}
+              title="Click to replay handwriting animation"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-950 tegaki-kyoto cursor-pointer select-none inline-block"
+            >
+              Hi, I'm Manish Rana
             </h1>
             <span className="inline-flex items-center px-3.5 py-1 rounded-xl border border-zinc-300/80 bg-white text-zinc-700 text-xs sm:text-sm font-medium shadow-xs overflow-hidden h-7 sm:h-8">
               <AnimatePresence mode="wait">
@@ -287,7 +298,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           </div>
 
           <p className="text-base sm:text-lg text-zinc-600 font-normal leading-relaxed max-w-[650px]">
-            Software engineer with an eye for design. I love building fast web products, scaling SaaS applications, and helping people bring their ideas to life.
+            I'm a Developer exploring web, mobile, design, and SEO while building application, creating digital experiences, and growing toward mastery in each skills.
           </p>
 
           {/* Availability Status Badge */}
@@ -312,54 +323,90 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           </h2>
           <div className="text-sm sm:text-base text-zinc-600 font-normal leading-relaxed space-y-3">
             <p>
-              At the end of 2022, I quit my job as a software engineer to go fulltime into building and scaling my own SaaS businesses. In the past, I pursued a double degree in computer science and business, interned at big tech companies in Silicon Valley, and competed in over 21 hackathons for fun. I also had the pleasure of being a part of the first ever in-person cohort of buildspace called <a href="https://buildspace.so/sf1" target="_blank" rel="noreferrer" className="text-zinc-950 font-medium underline underline-offset-4 decoration-zinc-300 hover:decoration-zinc-950 transition-colors">buildspace sf1</a>.
+              During my BIT journey, I developed a strong interest in technology, from coding and cybersecurity to designing and building real-world projects. Starting in my early semesters, I explored different skills and gradually began learning more deeply in later semesters. Today, I'm developing my skills in web development, mobile applications, UI/UX design, and SEO, with a goal of turning ideas into meaningful digital experiences and continuously growing as a developer.
             </p>
           </div>
         </section>
 
         {/* =========================================================================
-            THINGS I DO SECTION
+            THINGS I DO SECTION (Matching Reference Image Design)
            ========================================================================= */}
-        <section id="services" className="space-y-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
+        <section id="services" className="space-y-4 pt-2">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
             Things I do
           </h2>
 
-          <div className="relative space-y-6 pt-1">
-            {/* Timeline vertical line running down through the numbers column */}
-            <div className="absolute left-[20px] top-3 bottom-3 w-px bg-zinc-200/90 z-0" />
+          <div
+            className="space-y-0 divide-y divide-zinc-200/90 border-t border-b border-zinc-200/90"
+            onMouseLeave={() => setHoveredService(null)}
+          >
+            {THINGS_I_DO_ITEMS.map((item, idx) => {
+              const isHovered = hoveredService === idx;
 
-            {THINGS_I_DO_ITEMS.map((item, idx) => (
-              <div key={idx} className="relative z-10 flex items-baseline gap-3.5 sm:gap-4">
-                {/* Number node with dot, baseline aligned with title text */}
-                <div className="flex items-baseline justify-center shrink-0 min-w-[40px] bg-white text-zinc-950 font-bold font-model-plastic text-base sm:text-lg select-none z-10">
-                  {item.number}.
-                </div>
-
-                <div className="flex-1 min-w-0 space-y-2">
-                  <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight">
-                    {item.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-1.5">
-                    {item.tags.map((tag, tagIdx) => (
-                      <span
-                        key={tagIdx}
-                        className="px-2.5 py-1 rounded-md text-[11px] sm:text-xs font-medium bg-zinc-50 border border-zinc-200/90 text-zinc-700 shadow-2xs"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+              return (
+                <div
+                  key={item.id}
+                  onMouseEnter={() => setHoveredService(idx)}
+                  onMouseLeave={() => setHoveredService(null)}
+                  className="group relative flex items-start justify-between py-4 sm:py-5 cursor-pointer transition-colors"
+                >
+                  <div className="relative z-10 max-w-[52%] sm:max-w-[290px] md:max-w-[320px] pr-2">
+                    <h4 className="text-base sm:text-lg font-light tracking-normal text-zinc-800 group-hover:text-zinc-950 transition-colors">
+                      {item.title}
+                    </h4>
+                    <AnimatePresence>
+                      {isHovered && (
+                        <motion.p
+                          initial={{ opacity: 0, height: 0, y: -3 }}
+                          animate={{ opacity: 1, height: 'auto', y: 0 }}
+                          exit={{ opacity: 0, height: 0, y: -3 }}
+                          transition={{ duration: 0.2 }}
+                          className="text-xs sm:text-sm text-zinc-500 font-light leading-relaxed pt-1 overflow-hidden"
+                        >
+                          {item.description}
+                        </motion.p>
+                      )}
+                    </AnimatePresence>
                   </div>
+
+                  <ArrowUpRight className="size-5 sm:size-6 text-zinc-400 group-hover:text-zinc-900 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-200 shrink-0 stroke-[1.5] mt-0.5 relative z-10" />
+
+                  {/* Floating tilted mockup preview on hover - Positioned safely away from text */}
+                  <AnimatePresence>
+                    {isHovered && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.92, rotate: 2 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 6 }}
+                        exit={{ opacity: 0, scale: 0.92, rotate: 2 }}
+                        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute right-8 sm:right-12 md:right-16 -top-10 sm:-top-14 w-36 sm:w-48 md:w-56 aspect-4/3 rounded-xl overflow-hidden shadow-2xl border-4 border-white bg-white pointer-events-none z-20"
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
         {/* =========================================================================
             PROJECTS SECTION (Projects I done)
            ========================================================================= */}
-        <section id="projects" className="space-y-5">
+        <section
+          id="projects"
+          className="space-y-5"
+          onMouseEnter={(e) => setProjectCursorPos({ x: e.clientX, y: e.clientY })}
+          onMouseMove={(e) => setProjectCursorPos({ x: e.clientX, y: e.clientY })}
+          onMouseLeave={() => setProjectCursorPos(null)}
+        >
+          <ProjectCursorFollower pos={projectCursorPos} />
+
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
             Projects I done
           </h2>
@@ -371,6 +418,8 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 href={project.link || '#'}
                 target="_blank"
                 rel="noreferrer"
+                onMouseEnter={(e) => setProjectCursorPos({ x: e.clientX, y: e.clientY })}
+                onMouseMove={(e) => setProjectCursorPos({ x: e.clientX, y: e.clientY })}
                 className="group flex flex-col cursor-pointer"
               >
                 {/* Banner / Live Website Preview Container (Borderless & Full-Bleed) */}
@@ -471,16 +520,16 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                   {/* Main Row: Circle Logo on Left, Company & Role + Chevron in Middle, Date on Far Right */}
                   <div className="flex items-center justify-between gap-4 w-full">
                     <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
-                      {/* Circle Logo Badge */}
-                      <div className="w-12 h-12 rounded-full border border-zinc-200/90 bg-white flex items-center justify-center p-2 shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors">
+                      {/* Circle Logo Badge (bg-zinc-950 so white transparent logo pops with high contrast) */}
+                      <div className="w-12 h-12 rounded-full border border-zinc-800 bg-zinc-950 flex items-center justify-center p-1.5 shrink-0 shadow-2xs group-hover:border-zinc-700 transition-colors overflow-hidden">
                         {company.logo ? (
                           <img
                             src={company.logo}
                             alt={company.name}
-                            className="w-full h-full object-contain rounded-full"
+                            className="w-full h-full object-contain"
                           />
                         ) : (
-                          <span className="font-bold text-xs font-mono text-zinc-800">{company.initials}</span>
+                          <span className="font-bold text-xs font-mono text-zinc-100">{company.initials}</span>
                         )}
                       </div>
 
@@ -491,9 +540,10 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                             {company.name}
                           </h3>
                           <ChevronRight
-                            className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-200 ${
-                              isExpanded ? '-rotate-90 text-zinc-800' : 'rotate-0'
-                            }`}
+                            className={`w-3.5 h-3.5 transition-all duration-200 ${isExpanded
+                                ? '-rotate-90 text-zinc-800 opacity-100'
+                                : 'rotate-0 text-zinc-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5'
+                              }`}
                           />
                         </div>
                         <p className="text-xs sm:text-sm text-zinc-500 font-normal leading-tight">
@@ -550,24 +600,38 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
             4. EDUCATION SECTION
            ========================================================================= */}
         <section id="education" className="space-y-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
             Education
           </h2>
 
           <div className="space-y-2">
             {EDUCATION_ITEMS.map((edu, idx) => (
-              <div
+              <a
                 key={idx}
-                className="group flex items-start gap-3.5 p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 transition-all duration-200 border border-transparent hover:border-zinc-200/60"
+                href={edu.link || '#'}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex items-start gap-3.5 p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 transition-all duration-200 border border-transparent hover:border-zinc-200/60 cursor-pointer select-none"
               >
-                <div className="w-10 h-10 rounded-full border border-zinc-200/80 bg-white flex items-center justify-center font-bold text-xs font-mono text-zinc-800 shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors mt-0.5">
-                  {edu.initials}
+                <div className="w-12 h-12 rounded-full border border-zinc-200/90 bg-white flex items-center justify-center p-1.5 shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors mt-0.5 overflow-hidden">
+                  {edu.logo ? (
+                    <img
+                      src={edu.logo}
+                      alt={edu.name}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <span className="font-bold text-xs font-mono text-zinc-800">{edu.initials}</span>
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-4">
-                    <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight">
-                      {edu.name}
-                    </h3>
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight font-model-plastic">
+                        {edu.name}
+                      </h3>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-800 transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
+                    </div>
                     <span className="text-xs font-mono text-zinc-400 tabular-nums shrink-0">
                       {edu.period}
                     </span>
@@ -576,7 +640,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                     {edu.degree}
                   </div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </section>
@@ -647,11 +711,10 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
 
       {/* Fixed Floating Bottom macOS-style Dock Navbar (Hides on Scroll Down, Reveals Instantly on Scroll Up / Pause) */}
       <aside
-        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] transition-all duration-200 ease-out ${
-          isDockVisible
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] transition-all duration-200 ease-out ${isDockVisible
             ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
             : 'translate-y-16 opacity-0 scale-95 pointer-events-none'
-        }`}
+          }`}
       >
         <Dock direction="middle" className="border border-zinc-200/90 bg-white/95 shadow-xl shadow-zinc-200/50 backdrop-blur-xl">
           <DockIcon label="Home" href="#hero" isActive={activeSection === 'hero'}>
@@ -668,7 +731,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
             <Icons.gitHub className="size-5 text-current" />
           </DockIcon>
           <DockIcon label="Gmail" href={`mailto:${CONTACT_EMAIL}`}>
-            <Mail className="size-5 text-current" />
+            <Icons.gmail className="size-5" />
           </DockIcon>
           <DockIcon label="WhatsApp" href="https://wa.me/" target="_blank" rel="noreferrer">
             <Icons.whatsapp className="size-5 text-current" />

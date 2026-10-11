@@ -100,7 +100,7 @@ export const AceternityMinimalistPortfolio: React.FC<AceternityPortfolioProps> =
             </div>
           </div>
           <div>
-            <h1 className="text-zinc-900 dark:text-zinc-100 text-xl font-semibold tracking-tight md:text-2xl flex items-center gap-2">
+            <h1 className="text-zinc-900 dark:text-zinc-100 text-xl font-semibold tracking-tight md:text-2xl flex items-center gap-2 font-amiko">
               {PERSONAL_INFO.name}
               <span className="text-zinc-400 font-normal text-sm">aka</span>
               <span className="font-mono text-xs text-zinc-600 dark:text-zinc-400 italic">manishcodes-dot</span>

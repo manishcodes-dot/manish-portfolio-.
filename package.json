@@ -11,6 +11,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource/amiko": "^5.3.0",
     "@google/genai": "^2.4.0",
     "@radix-ui/react-tooltip": "^1.2.16",
     "@studio-freight/lenis": "^1.0.42",
@@ -23,6 +24,7 @@
     "motion": "^12.23.24",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
+    "tegaki": "^1.0.3",
     "vite": "^6.2.3"
   },
   "devDependencies": {

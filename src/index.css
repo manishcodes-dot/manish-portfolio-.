@@ -1,6 +1,10 @@
 @import "tailwindcss";
+@import "@fontsource/amiko/400.css";
+@import "@fontsource/amiko/600.css";
+@import "@fontsource/amiko/700.css";
 
 @theme {
+  --font-amiko: 'Amiko', sans-serif;
   --font-sans: 'PP Kyoto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-model-plastic: 'Model Plastic', 'PP Model Plastic', sans-serif;
@@ -26,11 +30,11 @@
     color-scheme: light dark;
   }
 
-  /* Main Headings (h1, h2) use Model Plastic */
-  h1,
+  /* Main Headings (h1, h2) use Model Plastic unless overridden */
+  h1:not(.font-amiko),
   h2,
   .font-model-plastic {
-    font-family: 'Model Plastic', 'PP Model Plastic', sans-serif !important;
+    font-family: 'Model Plastic', 'PP Model Plastic', sans-serif;
   }
 
   /* Subheadings (h3-h6), Body and general text use PP Kyoto */
@@ -56,6 +60,10 @@
   .font-mono {
     font-family: var(--font-mono);
   }
+}
+
+.font-amiko {
+  font-family: 'Amiko', sans-serif !important;
 }
 
 .font-sans {
@@ -224,6 +232,30 @@
   font-weight: 900;
   font-style: normal;
   font-display: swap;
+}
+
+/* 3. Tegaki Animated Kyoto Handwriting Variable Font */
+@font-face {
+  font-family: 'TegakiKyoto';
+  src: url('/assets/fonts/main name font.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+}
+
+@keyframes tegakiWrite {
+  0% {
+    font-variation-settings: 'PROG' 0;
+  }
+  100% {
+    font-variation-settings: 'PROG' 100;
+  }
+}
+
+.tegaki-kyoto {
+  font-family: 'TegakiKyoto', 'PP Kyoto', serif !important;
+  font-variation-settings: 'PROG' 100;
+  animation: tegakiWrite 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: font-variation-settings;
 }
 
 /* Technical Blueprint Grid Pattern */
