@@ -7,6 +7,7 @@
     "dev": "vite --port=3000",
     "build": "vite build",
     "preview": "vite preview",
+    "deploy": "vite build && gh-pages -d dist --dotfiles",
     "clean": "node -e \"fs.rmSync('dist', {recursive: true, force: true}); fs.rmSync('server.js', {force: true});\"",
     "lint": "tsc --noEmit"
   },
@@ -33,6 +34,7 @@
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
     "tailwindcss": "^4.1.14",
+    "gh-pages": "^6.3.0",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.3"
