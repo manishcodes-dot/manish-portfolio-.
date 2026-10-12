@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://manishcodes.dev/sitemap.xml
+Sitemap: https://www.rana-manish.com.np/sitemap.xml
