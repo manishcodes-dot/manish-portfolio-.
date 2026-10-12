@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Briefcase, Check, ChevronRight, Copy, FolderGit2, Globe, History, Home, Mail, Sparkles, X } from 'lucide-react';
@@ -46,10 +46,11 @@ const WORK_EXPERIENCE = [
   {
     name: 'Fishtail Infosolutions',
     role: 'SEO Analyst & Copywriter',
-    period: 'Mar 2023 - Present',
+    period: 'Feb 2026 - Present',
     description: 'Analyzing search engine performance, executing technical SEO audits, keyword research, and crafting engaging content strategy to maximize organic search visibility and user conversion.',
     logo: '/assets/img/fishtail-logo.png',
     initials: 'FI',
+    link: 'https://www.fishtailinfosolutions.com/company',
     technologies: ['SEO', 'JavaScript', 'HTML5', 'CSS3', 'Python'],
   },
 ];
@@ -89,7 +90,7 @@ const EDUCATION_ITEMS = [
   {
     name: 'Informatics College Pokhara',
     degree: 'Bachelor of Information Technology (BIT)',
-    period: '2021 - 2024',
+    period: '2023 - 2026',
     initials: 'ICP',
     logo: '/assets/img/informatics-logo.svg',
     link: 'https://icp.edu.np/',
@@ -141,8 +142,10 @@ const REFERENCE_PROJECTS = [
   },
 ];
 
-const CONTACT_EMAIL = 'dillion@verma.io';
-const GITHUB_URL = 'https://github.com/dillionverma';
+const CONTACT_EMAIL = 'ma.nessh.dev@gmail.com';
+const GITHUB_URL = 'https://github.com/manishcodes-dot';
+const WHATSAPP_PHONE = '+977 9844915216';
+const WHATSAPP_URL = 'https://wa.me/9779844915216?text=Hi%20Manish,%20I%20saw%20your%20portfolio!';
 
 const ProjectCursorFollower: React.FC<{
   pos: { x: number; y: number } | null;
@@ -173,11 +176,71 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [roleIndex, setRoleIndex] = useState(0);
-  const [expandedWorkIdx, setExpandedWorkIdx] = useState<number | null>(null);
   const [skylineView, setSkylineView] = useState<'2d' | '3d'>('2d');
   const [isDockVisible, setIsDockVisible] = useState(true);
-  const [nameAnimationKey, setNameAnimationKey] = useState(0);
   const [hoveredService, setHoveredService] = useState<number | null>(null);
+  const nameRef = useRef<HTMLHeadingElement>(null);
+  const nameAnimRef = useRef<number | null>(null);
+
+  const replayNameAnimation = useCallback(() => {
+    if (nameAnimRef.current) {
+      cancelAnimationFrame(nameAnimRef.current);
+      nameAnimRef.current = null;
+    }
+
+    if (!nameRef.current) return;
+
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      nameRef.current.style.fontVariationSettings = "'PROG' 100";
+      return;
+    }
+
+    // Immediately reset to 0 for a crisp, instant restart from the beginning
+    nameRef.current.style.fontVariationSettings = "'PROG' 0";
+
+    const duration = 1400; // 1.4s silky smooth natural handwriting speed
+    const startTime = performance.now();
+
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Natural ease-out cubic curve for organic ink flowing from pen
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = eased * 100;
+
+      if (nameRef.current) {
+        nameRef.current.style.fontVariationSettings = `'PROG' ${val.toFixed(2)}`;
+      }
+
+      if (progress < 1) {
+        nameAnimRef.current = requestAnimationFrame(animate);
+      } else {
+        if (nameRef.current) {
+          nameRef.current.style.fontVariationSettings = "'PROG' 100";
+        }
+        nameAnimRef.current = null;
+      }
+    };
+
+    nameAnimRef.current = requestAnimationFrame(animate);
+  }, []);
+
+  useEffect(() => {
+    // Wait until fonts are fully loaded to prevent initial layout shift or stutter
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        replayNameAnimation();
+      });
+    } else {
+      replayNameAnimation();
+    }
+
+    return () => {
+      if (nameAnimRef.current) {
+        cancelAnimationFrame(nameAnimRef.current);
+      }
+    };
+  }, [replayNameAnimation]);
   const [projectCursorPos, setProjectCursorPos] = useState<{ x: number; y: number } | null>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollYRef = useRef<number>(0);
@@ -274,10 +337,11 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
               className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl object-cover shadow-sm border border-zinc-200/90 shrink-0"
             />
             <h1
-              key={nameAnimationKey}
-              onClick={() => setNameAnimationKey((k) => k + 1)}
-              title="Click to replay handwriting animation"
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-950 tegaki-kyoto cursor-pointer select-none inline-block"
+              ref={nameRef}
+              onMouseEnter={replayNameAnimation}
+              onClick={replayNameAnimation}
+              title="Hover to replay handwriting animation"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-zinc-950 tegaki-kyoto cursor-pointer select-none inline-block transition-transform duration-150 active:scale-[0.99]"
             >
               Hi, I'm Manish Rana
             </h1>
@@ -509,90 +573,82 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           </h2>
 
           <div className="space-y-3">
-            {WORK_EXPERIENCE.map((company, idx) => {
-              const isExpanded = expandedWorkIdx === idx;
-              return (
-                <div
-                  key={idx}
-                  onClick={() => setExpandedWorkIdx(isExpanded ? null : idx)}
-                  className="group flex flex-col p-2.5 sm:p-3 -mx-2 sm:-mx-3 rounded-2xl hover:bg-zinc-100/70 transition-all duration-200 cursor-pointer space-y-2 select-none"
-                >
-                  {/* Main Row: Circle Logo on Left, Company & Role + Chevron in Middle, Date on Far Right */}
-                  <div className="flex items-center justify-between gap-4 w-full">
-                    <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
-                      {/* Circle Logo Badge (bg-zinc-950 so white transparent logo pops with high contrast) */}
-                      <div className="w-12 h-12 rounded-full border border-zinc-800 bg-zinc-950 flex items-center justify-center p-1.5 shrink-0 shadow-2xs group-hover:border-zinc-700 transition-colors overflow-hidden">
-                        {company.logo ? (
-                          <img
-                            src={company.logo}
-                            alt={company.name}
-                            className="w-full h-full object-contain"
-                          />
-                        ) : (
-                          <span className="font-bold text-xs font-mono text-zinc-100">{company.initials}</span>
-                        )}
-                      </div>
-
-                      {/* Company Name with Chevron & Role */}
-                      <div className="min-w-0 space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight font-model-plastic leading-snug">
-                            {company.name}
-                          </h3>
-                          <ChevronRight
-                            className={`w-3.5 h-3.5 transition-all duration-200 ${isExpanded
-                                ? '-rotate-90 text-zinc-800 opacity-100'
-                                : 'rotate-0 text-zinc-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5'
-                              }`}
-                          />
-                        </div>
-                        <p className="text-xs sm:text-sm text-zinc-500 font-normal leading-tight">
-                          {company.role}
-                        </p>
-                      </div>
+            {WORK_EXPERIENCE.map((company, idx) => (
+              <a
+                key={idx}
+                href={company.link || '#'}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex flex-col p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 border border-transparent hover:border-zinc-200/60 transition-all duration-200 cursor-pointer space-y-2.5 select-none"
+              >
+                {/* Main Row: Circle Logo on Left, Company & Role + Chevron in Middle, Date on Far Right */}
+                <div className="flex items-center justify-between gap-4 w-full">
+                  <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
+                    {/* Circle Logo Badge */}
+                    <div className="w-12 h-12 rounded-full border border-zinc-800 bg-zinc-950 flex items-center justify-center p-1.5 shrink-0 shadow-2xs group-hover:border-zinc-700 transition-colors overflow-hidden">
+                      {company.logo ? (
+                        <img
+                          src={company.logo}
+                          alt={company.name}
+                          className="w-full h-full object-contain"
+                        />
+                      ) : (
+                        <span className="font-bold text-xs font-mono text-zinc-100">{company.initials}</span>
+                      )}
                     </div>
 
-                    {/* Far Right Date Period */}
-                    <span className="text-xs sm:text-sm text-zinc-400 font-normal shrink-0 ml-4 tabular-nums">
-                      {company.period}
-                    </span>
+                    {/* Company Name with Arrow & Role */}
+                    <div className="min-w-0 space-y-0.5">
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight font-model-plastic leading-snug">
+                          {company.name}
+                        </h3>
+                        <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-800 transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
+                      </div>
+                      <p className="text-xs sm:text-sm text-zinc-500 font-normal leading-tight">
+                        {company.role}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Revealed Description & Tech Stack Badges when Expanded */}
-                  {isExpanded && (
-                    <div className="pl-[61px] space-y-2.5 pt-1 transition-all duration-200">
-                      <p className="text-xs sm:text-sm text-zinc-600 font-normal leading-relaxed">
-                        {company.description}
-                      </p>
-                      {company.technologies && company.technologies.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-2 pt-1">
-                          {company.technologies.map((tech, techIdx) => {
-                            const iconUrl = TECH_ICONS[tech];
-                            return (
-                              <div
-                                key={techIdx}
-                                className="group/tech inline-flex items-center h-7 w-7 hover:w-auto px-1.5 rounded-full border border-zinc-200/80 bg-zinc-50/90 hover:bg-white hover:border-zinc-300 shadow-2xs transition-all duration-300 ease-in-out overflow-hidden cursor-pointer select-none shrink-0"
-                              >
-                                <div className="w-4 h-4 shrink-0 flex items-center justify-center">
-                                  {iconUrl ? (
-                                    <img src={iconUrl} alt={tech} className="w-3.5 h-3.5 object-contain shrink-0" />
-                                  ) : (
-                                    <span className="text-[9px] font-bold text-zinc-700 shrink-0">{tech.slice(0, 2)}</span>
-                                  )}
-                                </div>
-                                <span className="max-w-0 opacity-0 group-hover/tech:max-w-[140px] group-hover/tech:opacity-100 group-hover/tech:ml-1.5 text-[11px] font-mono font-medium text-zinc-700 whitespace-nowrap transition-all duration-300 ease-in-out pr-1 shrink-0">
-                                  {tech}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
+                  {/* Far Right Date Period */}
+                  <span className="text-xs font-mono text-zinc-400 font-normal shrink-0 ml-4 tabular-nums">
+                    {company.period}
+                  </span>
+                </div>
+
+                {/* Description & Tech Stack Badges */}
+                <div className="pl-[61px] space-y-2.5 pt-0.5">
+                  <p className="text-xs sm:text-sm text-zinc-600 font-normal leading-relaxed">
+                    {company.description}
+                  </p>
+                  {company.technologies && company.technologies.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                      {company.technologies.map((tech, techIdx) => {
+                        const iconUrl = TECH_ICONS[tech];
+                        return (
+                          <div
+                            key={techIdx}
+                            className="group/tech inline-flex items-center h-7 w-7 hover:w-auto px-1.5 rounded-full border border-zinc-200/80 bg-zinc-50/90 hover:bg-white hover:border-zinc-300 shadow-2xs transition-all duration-300 ease-in-out overflow-hidden select-none shrink-0"
+                          >
+                            <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                              {iconUrl ? (
+                                <img src={iconUrl} alt={tech} className="w-3.5 h-3.5 object-contain shrink-0" />
+                              ) : (
+                                <span className="text-[9px] font-bold text-zinc-700 shrink-0">{tech.slice(0, 2)}</span>
+                              )}
+                            </div>
+                            <span className="max-w-0 opacity-0 group-hover/tech:max-w-[140px] group-hover/tech:opacity-100 group-hover/tech:ml-1.5 text-[11px] font-mono font-medium text-zinc-700 whitespace-nowrap transition-all duration-300 ease-in-out pr-1 shrink-0">
+                              {tech}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
-              );
-            })}
+              </a>
+            ))}
           </div>
         </section>
 
@@ -702,6 +758,35 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 Available for full-stack engineering, system architecture, SaaS building, and high-impact contracts.
               </p>
             </div>
+
+            {/* Direct WhatsApp Contact Card */}
+            <div className="p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 border border-transparent hover:border-zinc-200/60 transition-colors">
+              <div className="flex items-center justify-between gap-4">
+                <h3 className="text-base sm:text-lg font-bold text-zinc-950">
+                  WhatsApp
+                </h3>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1 rounded-lg border border-emerald-300/80 bg-emerald-50 hover:bg-emerald-100 text-xs font-mono font-medium text-emerald-800 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                >
+                  <Icons.whatsapp className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Chat on WhatsApp</span>
+                </a>
+              </div>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-zinc-700 hover:text-zinc-950 font-medium hover:underline block mt-1 font-mono"
+              >
+                {WHATSAPP_PHONE}
+              </a>
+              <p className="text-xs text-zinc-500 mt-1 font-normal">
+                Fastest response for project inquiries, freelance discussions, and quick catch-ups.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -733,7 +818,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           <DockIcon label="Gmail" href={`mailto:${CONTACT_EMAIL}`}>
             <Icons.gmail className="size-5" />
           </DockIcon>
-          <DockIcon label="WhatsApp" href="https://wa.me/" target="_blank" rel="noreferrer">
+          <DockIcon label="WhatsApp" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
             <Icons.whatsapp className="size-5 text-current" />
           </DockIcon>
         </Dock>

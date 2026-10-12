@@ -6,7 +6,7 @@ export const PERSONAL_INFO = {
   role: 'Senior Web & Full-Stack Engineer',
   tagline: 'Building robust distributed systems, high-performance web applications, and thoughtful developer experiences.',
   bio: `Senior Web Developer with 6+ years specializing in modern TypeScript ecosystems, React architecture, distributed node services, and resilient user experiences. Focused on sub-100ms Core Web Vitals, accessible design systems, and deterministic state synchronization at scale.`,
-  email: 'manishrana98449@gmail.com',
+  email: 'ma.nessh.dev@gmail.com',
   location: 'Bangalore, India (Open to Worldwide Remote)',
   availability: 'Available for high-impact contracts & senior engineering roles',
   status: 'actively-building',

@@ -239,22 +239,12 @@
   font-family: 'TegakiKyoto';
   src: url('/assets/fonts/main name font.ttf') format('truetype');
   font-style: normal;
-  font-display: swap;
-}
-
-@keyframes tegakiWrite {
-  0% {
-    font-variation-settings: 'PROG' 0;
-  }
-  100% {
-    font-variation-settings: 'PROG' 100;
-  }
+  font-display: block;
 }
 
 .tegaki-kyoto {
   font-family: 'TegakiKyoto', 'PP Kyoto', serif !important;
   font-variation-settings: 'PROG' 100;
-  animation: tegakiWrite 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   will-change: font-variation-settings;
 }
 
