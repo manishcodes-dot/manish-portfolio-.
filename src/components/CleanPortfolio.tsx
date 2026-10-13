@@ -19,25 +19,25 @@ const THINGS_I_DO_ITEMS = [
     id: 'webdev',
     title: 'Web Development',
     description: 'High-performance websites and modern web applications crafted with responsive interactions, robust architecture, and clean code.',
-    image: '/assets/img/webdev-mockup.jpg',
+    image: '/assets/img/webdev-mockup.webp',
   },
   {
     id: 'uiux',
     title: 'UI and UX Design',
     description: 'Designing intuitive and scalable interfaces for web dashboards, mobile applications, and design systems.',
-    image: '/assets/img/uiux-mockup.jpg',
+    image: '/assets/img/uiux-mockup.webp',
   },
   {
     id: 'mobile',
     title: 'Mobile Development',
     description: 'Cross-platform and native mobile apps built with fluid touch gestures, smooth animations, and high performance.',
-    image: '/assets/img/mobile-mockup.jpg',
+    image: '/assets/img/mobile-mockup.webp',
   },
   {
     id: 'seo',
     title: 'SEO',
     description: 'Search engine optimization, semantic structured markup, technical performance audits, and organic search visibility.',
-    image: '/assets/img/seo-mockup.jpg',
+    image: '/assets/img/seo-mockup.webp',
   },
 ];
 
@@ -368,6 +368,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           {/* Availability Status Badge */}
           <a
             href="#contact"
+            aria-label="Available for projects. Jump to contact section"
             className="fixed top-6 right-6 sm:top-8 sm:right-10 flex items-center gap-2.5 font-mono text-[11px] text-zinc-700 bg-white/90 backdrop-blur-md px-3.5 py-1 rounded-xl border border-zinc-300/80 hover:border-zinc-400 shadow-xs transition-all duration-300 cursor-pointer select-none group focus:outline-none focus:ring-2 focus:ring-emerald-500/40 z-50 shrink-0 whitespace-nowrap"
           >
             <span className="relative flex h-2.5 w-2.5 items-center justify-center shrink-0">
@@ -415,9 +416,9 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                   className="group relative flex items-start justify-between py-4 sm:py-5 cursor-pointer transition-colors"
                 >
                   <div className="relative z-10 max-w-[52%] sm:max-w-[290px] md:max-w-[320px] pr-2">
-                    <h4 className="text-base sm:text-lg font-light tracking-normal text-zinc-800 group-hover:text-zinc-950 transition-colors">
+                    <h3 className="text-base sm:text-lg font-light tracking-normal text-zinc-800 group-hover:text-zinc-950 transition-colors">
                       {item.title}
-                    </h4>
+                    </h3>
                     <AnimatePresence>
                       {isHovered && (
                         <motion.p
@@ -448,6 +449,10 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                         <img
                           src={item.image}
                           alt={item.title}
+                          width={224}
+                          height={168}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover rounded-lg"
                         />
                       </motion.div>
@@ -482,6 +487,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 href={project.link || '#'}
                 target="_blank"
                 rel="noreferrer"
+                aria-label={`View project: ${project.title}`}
                 onMouseEnter={(e) => setProjectCursorPos({ x: e.clientX, y: e.clientY })}
                 onMouseMove={(e) => setProjectCursorPos({ x: e.clientX, y: e.clientY })}
                 className="group flex flex-col cursor-pointer"
@@ -501,6 +507,8 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                     <img
                       src={project.image}
                       alt={project.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover rounded-2xl"
                     />
                   )}
@@ -512,7 +520,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 </h3>
 
                 {/* Description Below Title */}
-                <p className="text-xs sm:text-sm text-zinc-500 font-normal leading-relaxed mt-1">
+                <p className="text-xs sm:text-sm text-zinc-600 font-normal leading-relaxed mt-1">
                   {project.description}
                 </p>
 
@@ -579,6 +587,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 href={company.link || '#'}
                 target="_blank"
                 rel="noreferrer"
+                aria-label={`Visit ${company.name} company profile`}
                 className="group flex flex-col p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 border border-transparent hover:border-zinc-200/60 transition-all duration-200 cursor-pointer space-y-2.5 select-none"
               >
                 {/* Main Row: Circle Logo on Left, Company & Role + Chevron in Middle, Date on Far Right */}
@@ -589,7 +598,9 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                       {company.logo ? (
                         <img
                           src={company.logo}
-                          alt={company.name}
+                          alt={`${company.name} logo`}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-contain"
                         />
                       ) : (
@@ -603,16 +614,16 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                         <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight font-model-plastic leading-snug">
                           {company.name}
                         </h3>
-                        <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-800 transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
+                        <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-800 transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
                       </div>
-                      <p className="text-xs sm:text-sm text-zinc-500 font-normal leading-tight">
+                      <p className="text-xs sm:text-sm text-zinc-600 font-normal leading-tight">
                         {company.role}
                       </p>
                     </div>
                   </div>
 
                   {/* Far Right Date Period */}
-                  <span className="text-xs font-mono text-zinc-400 font-normal shrink-0 ml-4 tabular-nums">
+                  <span className="text-xs font-mono text-zinc-500 font-normal shrink-0 ml-4 tabular-nums">
                     {company.period}
                   </span>
                 </div>
@@ -667,13 +678,16 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 href={edu.link || '#'}
                 target="_blank"
                 rel="noreferrer"
+                aria-label={`Visit ${edu.name} college website`}
                 className="group flex items-start gap-3.5 p-3.5 sm:p-4 -mx-3 sm:-mx-4 rounded-2xl hover:bg-zinc-100/70 transition-all duration-200 border border-transparent hover:border-zinc-200/60 cursor-pointer select-none"
               >
                 <div className="w-12 h-12 rounded-full border border-zinc-200/90 bg-white flex items-center justify-center p-1.5 shrink-0 shadow-2xs group-hover:border-zinc-300 transition-colors mt-0.5 overflow-hidden">
                   {edu.logo ? (
                     <img
                       src={edu.logo}
-                      alt={edu.name}
+                      alt={`${edu.name} logo`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-contain"
                     />
                   ) : (
@@ -686,9 +700,9 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                       <h3 className="text-base sm:text-lg font-bold text-zinc-950 tracking-tight font-model-plastic">
                         {edu.name}
                       </h3>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-800 transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
+                      <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-800 transition-all duration-200 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
                     </div>
-                    <span className="text-xs font-mono text-zinc-400 tabular-nums shrink-0">
+                    <span className="text-xs font-mono text-zinc-500 tabular-nums shrink-0">
                       {edu.period}
                     </span>
                   </div>
@@ -717,7 +731,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                   className="px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white text-xs sm:text-sm font-bold text-zinc-900 border border-zinc-200/90 shadow-2xs flex items-center gap-1.5 sm:gap-2 hover:border-zinc-300 hover:shadow-xs transition-all duration-200 cursor-default select-none shrink-0"
                 >
                   {iconUrl ? (
-                    <img src={iconUrl} alt={skill} className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain shrink-0" />
+                    <img src={iconUrl} alt={skill} className="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain shrink-0" loading="lazy" decoding="async" />
                   ) : null}
                   <span>{skill}</span>
                 </div>
@@ -742,6 +756,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 </h3>
                 <button
                   onClick={handleCopyEmail}
+                  aria-label="Copy email address to clipboard"
                   className="px-3 py-1 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-100 text-xs font-mono font-medium text-zinc-800 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
                 >
                   {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" />}
@@ -750,11 +765,12 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
               </div>
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
+                aria-label="Send email to Manish Rana"
                 className="text-sm text-zinc-700 hover:text-zinc-950 font-medium hover:underline block mt-1 font-mono"
               >
                 {CONTACT_EMAIL}
               </a>
-              <p className="text-xs text-zinc-500 mt-1 font-normal">
+              <p className="text-xs text-zinc-600 mt-1 font-normal">
                 Available for full-stack engineering, system architecture, SaaS building, and high-impact contracts.
               </p>
             </div>
@@ -769,6 +785,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noreferrer"
+                  aria-label="Chat with Manish Rana on WhatsApp"
                   className="px-3 py-1 rounded-lg border border-emerald-300/80 bg-emerald-50 hover:bg-emerald-100 text-xs font-mono font-medium text-emerald-800 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
                 >
                   <Icons.whatsapp className="w-3.5 h-3.5 text-emerald-600" />
@@ -779,6 +796,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noreferrer"
+                aria-label="Open WhatsApp conversation"
                 className="text-sm text-zinc-700 hover:text-zinc-950 font-medium hover:underline block mt-1 font-mono"
               >
                 {WHATSAPP_PHONE}

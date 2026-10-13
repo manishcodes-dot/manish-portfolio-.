@@ -134,14 +134,33 @@ export const DockIcon: React.FC<DockIconProps> = ({
 
   if (href) {
     return (
-      <a href={href} target={target} rel={rel} onClick={onClick} className="inline-block">
+      <a
+        href={href}
+        target={target}
+        rel={rel}
+        onClick={onClick}
+        className="inline-block"
+        aria-label={label || 'Navigation link'}
+      >
         {content}
       </a>
     );
   }
 
   return (
-    <div onClick={onClick} className="inline-block cursor-pointer">
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+      className="inline-block cursor-pointer"
+      aria-label={label || 'Action button'}
+    >
       {content}
     </div>
   );
