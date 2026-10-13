@@ -40,10 +40,26 @@
     <meta name="twitter:description" content="Portfolio of Manish Rana — Full Stack &amp; Mobile Developer specializing in React, Flutter, Node.js, and modern UI/UX digital experiences." />
     <meta name="twitter:image" content="https://www.rana-manish.com.np/assets/img/banner.webp" />
 
-    <!-- Font Preconnect & Styles -->
+    <!-- Font Preconnect & Non-blocking Asynchronous Stylesheet -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiko:wght@400;600;700&family=Anton&family=Bebas+Neue&family=Fira+Code:wght@400;500;600&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=Pacifico&family=Playfair+Display:wght@600;700;800&family=Yellowtail&family=Dancing+Script:wght@700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
     <link rel="preload" href="/assets/fonts/main name font.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 
     <!-- Structured Data (JSON-LD Schema for Google Knowledge Graph) -->
@@ -105,7 +121,7 @@
       ]
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-CzaHD9WR.js"></script>
+    <script type="module" crossorigin src="/assets/index-CY6vol3D.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-icons-Buo_vKjs.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-Cur0JQtu.js">
     <link rel="stylesheet" crossorigin href="/assets/index--v6bY2pf.css">
