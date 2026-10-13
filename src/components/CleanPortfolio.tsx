@@ -388,7 +388,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           </h2>
           <div className="text-sm sm:text-base text-zinc-600 font-normal leading-relaxed space-y-3">
             <p>
-              During my BIT journey, I developed a strong interest in technology, from coding and cybersecurity to designing and building real-world projects. Starting in my early semesters, I explored different skills and gradually began learning more deeply in later semesters. Today, I'm developing my skills in web development, mobile applications, UI/UX design, and SEO, with a goal of turning ideas into meaningful digital experiences and continuously growing as a developer.
+              During my BIT journey, I developed a strong interest in technology, from coding to designing and building real-world projects. Starting in my early semesters, I explored different skills and gradually began learning more deeply in later semesters. Today, I'm developing my skills in web development, mobile applications, UI/UX design, and SEO, with a goal of turning ideas into digital experiences and also continuously growing as a developer.
             </p>
           </div>
         </section>
