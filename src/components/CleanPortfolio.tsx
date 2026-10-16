@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Briefcase, Check, ChevronRight, Copy, FolderGit2, Globe, History, Home, Mail, Sparkles, X } from 'lucide-react';
 import { Dock, DockIcon, Icons } from './ui/dock';
 import { Project } from '../types';
-import ContributionSkyline from './ui/contribution-skyline';
+import ContributionSkyline, { ContributionDay } from './ui/contribution-skyline';
 import { MANISH_GITHUB_CONTRIBUTIONS } from '../data/githubContributions';
 
 interface CleanPortfolioProps {
@@ -51,7 +51,7 @@ const WORK_EXPERIENCE = [
     logo: '/assets/img/fishtail-logo.png',
     initials: 'FI',
     link: 'https://www.fishtailinfosolutions.com/company',
-    technologies: ['SEO', 'JavaScript', 'HTML5', 'CSS3', 'Python'],
+    technologies: ['SEO'],
   },
 ];
 
@@ -178,6 +178,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [roleIndex, setRoleIndex] = useState(0);
   const [skylineView, setSkylineView] = useState<'2d' | '3d'>('2d');
+  const [contributionsData, setContributionsData] = useState<ContributionDay[]>(MANISH_GITHUB_CONTRIBUTIONS);
   const [isDockVisible, setIsDockVisible] = useState(true);
   const [hoveredService, setHoveredService] = useState<number | null>(null);
   const nameRef = useRef<HTMLHeadingElement>(null);
@@ -275,6 +276,31 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
       setRoleIndex((prevIndex) => (prevIndex + 1) % ROLES.length);
     }, 3000);
     return () => clearInterval(roleTimer);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch('https://github-contributions-api.jogruber.de/v4/manishcodes-dot?y=last')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch live contributions');
+        return res.json();
+      })
+      .then((data) => {
+        if (isMounted && data?.contributions && Array.isArray(data.contributions)) {
+          const formatted: ContributionDay[] = data.contributions.map((c: { date: string; count: number }) => ({
+            date: c.date,
+            count: c.count,
+          }));
+          setContributionsData(formatted);
+        }
+      })
+      .catch((err) => {
+        console.warn('Live GitHub contributions fetch fallback:', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -632,7 +658,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
             className="w-full transition-all duration-300"
           >
             <ContributionSkyline
-              data={MANISH_GITHUB_CONTRIBUTIONS}
+              data={contributionsData}
               view={skylineView}
               onViewChange={(v) => setSkylineView(v)}
             />
