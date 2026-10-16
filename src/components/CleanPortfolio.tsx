@@ -174,6 +174,7 @@ const ProjectCursorFollower: React.FC<{
 
 export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedInstall, setCopiedInstall] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [roleIndex, setRoleIndex] = useState(0);
   const [skylineView, setSkylineView] = useState<'2d' | '3d'>('2d');
@@ -290,7 +291,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
       }, 80);
 
       // Active section spy
-      const sections = ['hero', 'about', 'services', 'projects', 'contributions', 'work', 'education', 'skills', 'contact'];
+      const sections = ['hero', 'about', 'services', 'projects', 'npm-packages', 'contributions', 'work', 'education', 'skills', 'contact'];
       const scrollPos = window.scrollY + 220;
 
       for (const sectionId of sections) {
@@ -319,6 +320,12 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
     navigator.clipboard.writeText(CONTACT_EMAIL);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const handleCopyInstall = () => {
+    navigator.clipboard.writeText('npm i craft-avatar');
+    setCopiedInstall(true);
+    setTimeout(() => setCopiedInstall(false), 2000);
   };
 
   return (
@@ -549,6 +556,66 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
                 </div>
               </a>
             ))}
+          </div>
+        </section>
+
+        {/* =========================================================================
+            NPM PACKAGES SECTION (Bordered text card with integrated links & GitHub visit button)
+           ========================================================================= */}
+        <section id="npm-packages" className="space-y-3 pt-1">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950">
+            Npm packages
+          </h2>
+
+          <div className="rounded-2xl border border-zinc-200/90 bg-white p-4 sm:p-5 shadow-2xs hover:border-zinc-300 transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4">
+            {/* Left side: Package Name + version on top, Install command below */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <a
+                  href="https://www.npmjs.com/package/craft-avatar"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-base sm:text-lg font-bold font-mono text-zinc-950 hover:text-zinc-800 inline-flex items-center gap-1.5 hover:underline decoration-zinc-300 underline-offset-4 transition-colors"
+                >
+                  <span>craft-avatar</span>
+                  <ArrowUpRight className="size-4 text-zinc-400 stroke-[2]" />
+                </a>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200/70">
+                  v1.0.0
+                </span>
+              </div>
+
+              {/* Install snippet */}
+              <div className="flex items-center gap-2 text-xs font-mono">
+                <span className="text-zinc-500 font-medium">Install:</span>
+                <button
+                  type="button"
+                  onClick={handleCopyInstall}
+                  title="Click to copy install command"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200/70 text-zinc-800 border border-zinc-200/80 text-xs font-mono transition-colors cursor-pointer active:scale-95"
+                >
+                  <code>npm i craft-avatar</code>
+                  {copiedInstall ? (
+                    <Check className="size-3 text-emerald-600" />
+                  ) : (
+                    <Copy className="size-3 text-zinc-400 hover:text-zinc-600" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Right side: GitHub logo and link in the middle from top and bottom */}
+            <a
+              href="https://github.com/manishcodes-dot/craft-avatar.git"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Visit craft-avatar repository on GitHub"
+              className="px-3.5 py-1.5 rounded-xl border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 hover:border-zinc-300 text-xs font-mono font-medium text-zinc-900 transition-all duration-150 flex items-center gap-2 cursor-pointer shadow-2xs shrink-0 self-start sm:self-center group active:scale-95"
+            >
+              <Icons.gitHub className="size-3.5 text-zinc-900" />
+              <span>Visit GitHub</span>
+              <ArrowUpRight className="size-3 text-zinc-400 group-hover:text-zinc-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </a>
           </div>
         </section>
 
@@ -815,8 +882,8 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
       {/* Fixed Floating Bottom macOS-style Dock Navbar (Hides on Scroll Down, Reveals Instantly on Scroll Up / Pause) */}
       <aside
         className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[95vw] transition-all duration-200 ease-out ${isDockVisible
-            ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
-            : 'translate-y-16 opacity-0 scale-95 pointer-events-none'
+          ? 'translate-y-0 opacity-100 scale-100 pointer-events-auto'
+          : 'translate-y-16 opacity-0 scale-95 pointer-events-none'
           }`}
       >
         <Dock direction="middle" className="border border-zinc-200/90 bg-white/95 shadow-xl shadow-zinc-200/50 backdrop-blur-xl">
