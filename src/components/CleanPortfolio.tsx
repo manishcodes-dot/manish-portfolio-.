@@ -6,6 +6,7 @@ import { Dock, DockIcon, Icons } from './ui/dock';
 import { Project } from '../types';
 import ContributionSkyline, { ContributionDay } from './ui/contribution-skyline';
 import { MANISH_GITHUB_CONTRIBUTIONS } from '../data/githubContributions';
+import { fetchLiveContributions } from '../services/githubService';
 
 interface CleanPortfolioProps {
   onSelectProject?: (project: Project) => void;
@@ -45,13 +46,13 @@ const THINGS_I_DO_ITEMS = [
 const WORK_EXPERIENCE = [
   {
     name: 'Fishtail Infosolutions',
-    role: 'SEO Analyst & Copywriter',
+    role: 'SEO Analyst',
     period: 'Feb 2026 - Present',
-    description: 'Analyzing search engine performance, executing technical SEO audits, keyword research, and crafting engaging content strategy to maximize organic search visibility and user conversion.',
+    description: 'Analyzing search engine performance, executing technical SEO audits, keyword research, and optimizing web infrastructure to maximize organic search visibility and user conversion.',
     logo: '/assets/img/fishtail-logo.png',
     initials: 'FI',
     link: 'https://www.fishtailinfosolutions.com/company',
-    technologies: ['SEO'],
+    technologies: ['Bing', 'Webmaster', 'WordPress'],
   },
 ];
 
@@ -78,7 +79,10 @@ const TECH_ICONS: Record<string, string> = {
   'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
   'Nginx': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg',
   'NGINX': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg',
-  'SEO': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg',
+  'Bing': '/assets/icons/bing.svg',
+  'Webmaster': '/assets/icons/webmaster.svg',
+  'WordPress': '/assets/icons/wordpress.svg',
+  'Wordpress': '/assets/icons/wordpress.svg',
   'HTML5': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
   'CSS3': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg',
   'TypeScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
@@ -101,7 +105,6 @@ const EDUCATION_ITEMS = [
 const SKILLS = [
   'Dart',
   'JavaScript',
-  'Python',
   'Flutter',
   'React',
   'Next.js',
@@ -278,30 +281,47 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
     return () => clearInterval(roleTimer);
   }, []);
 
+  const syncContributions = useCallback(async () => {
+    try {
+      const data = await fetchLiveContributions();
+      if (data && data.length > 0) {
+        setContributionsData(data);
+      }
+    } catch (err) {
+      console.warn('Live contributions sync error:', err);
+    }
+  }, []);
+
   useEffect(() => {
-    let isMounted = true;
-    fetch('https://github-contributions-api.jogruber.de/v4/manishcodes-dot?y=last')
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch live contributions');
-        return res.json();
-      })
-      .then((data) => {
-        if (isMounted && data?.contributions && Array.isArray(data.contributions)) {
-          const formatted: ContributionDay[] = data.contributions.map((c: { date: string; count: number }) => ({
-            date: c.date,
-            count: c.count,
-          }));
-          setContributionsData(formatted);
-        }
-      })
-      .catch((err) => {
-        console.warn('Live GitHub contributions fetch fallback:', err);
-      });
+    // Initial fetch on mount
+    syncContributions();
+
+    // Auto-sync whenever tab gains focus (e.g. user pushed commits and switched back)
+    const handleFocus = () => {
+      syncContributions();
+    };
+
+    // Auto-sync when tab visibility restores
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        syncContributions();
+      }
+    };
+
+    // Real-time periodic poll every 60s
+    const pollInterval = setInterval(() => {
+      syncContributions();
+    }, 60000);
+
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibility);
 
     return () => {
-      isMounted = false;
+      clearInterval(pollInterval);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
     };
-  }, []);
+  }, [syncContributions]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -649,9 +669,21 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
             GITHUB CONTRIBUTION HEATMAP & 3D SKYLINE SECTION (Hover for 3D)
            ========================================================================= */}
         <section id="contributions" className="space-y-4 pt-2">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
-            GitHub Contributions
-          </h2>
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 font-model-plastic">
+              GitHub Contributions
+            </h2>
+            <span
+              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
+              title="Real-time live sync with GitHub"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Live
+            </span>
+          </div>
           <div
             onMouseEnter={() => setSkylineView('3d')}
             onMouseLeave={() => setSkylineView('2d')}
@@ -659,6 +691,7 @@ export const CleanPortfolio: React.FC<CleanPortfolioProps> = () => {
           >
             <ContributionSkyline
               data={contributionsData}
+              endDate={new Date()}
               view={skylineView}
               onViewChange={(v) => setSkylineView(v)}
             />

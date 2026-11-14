@@ -32,13 +32,13 @@ const WORK_EXPERIENCES: WorkExperienceItem[] = [
         <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Database Systems</span>.
       </>
     ),
-    logoSrc: '/assets/img/informaticse imgsvg.svg',
+    logoSrc: '/assets/img/informatics-logo.svg',
     tileBg: 'bg-white border border-zinc-200 text-zinc-950 shadow-sm'
   },
   {
     id: 'fishtail-infosolutions',
     company: 'Fishtail Infosolutions',
-    role: 'SEO Analyst & Copywriter',
+    role: 'SEO Analyst',
     startDate: 'MAR 2023',
     endDate: 'PRESENT',
     statusBadge: 'PRESENT',
@@ -47,9 +47,8 @@ const WORK_EXPERIENCES: WorkExperienceItem[] = [
         At Fishtail Infosolutions, my role involves analyzing{' '}
         <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Search Engine Performance</span>, performing{' '}
         <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Technical SEO Audits</span>, conducting{' '}
-        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Keyword Research</span>, and crafting engaging{' '}
-        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Copywriting</span> &amp;{' '}
-        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Content Strategy</span> to maximize organic search visibility and user conversion.
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">Keyword Research</span>, and implementing{' '}
+        <span className="underline decoration-zinc-400 underline-offset-4 text-zinc-900 font-medium">SEO &amp; Infrastructure Optimization</span> to maximize organic search visibility and user conversion.
       </>
     ),
     logoSrc: '/assets/img/fishtail-logo.png',
@@ -75,7 +74,7 @@ export const WorkExperienceSection: React.FC = () => {
               Work Experience
             </h2>
             <p className="text-sm text-zinc-500 mt-1.5 max-w-lg font-kyoto">
-              Engineering track record, SEO analysis &amp; copywriting experience, and academic graduation background.
+              Engineering track record, SEO analysis &amp; search optimization experience, and academic graduation background.
             </p>
           </div>
         </div>

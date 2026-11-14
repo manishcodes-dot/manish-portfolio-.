@@ -93,7 +93,7 @@ export const AceternityMinimalistPortfolio: React.FC<AceternityPortfolioProps> =
           <div className="perspective-distant">
             <div className="rounded-lg bg-zinc-100 dark:bg-zinc-800 p-0.5 shadow-md border border-zinc-200 dark:border-zinc-700 transition-transform duration-300 hover:scale-105">
               <img
-                src="/assets/img/manish-person.jpg"
+                src="/assets/img/manish-person.webp"
                 alt="Manish Rana"
                 className="aspect-square size-10 rounded-md object-cover shadow-xs"
               />

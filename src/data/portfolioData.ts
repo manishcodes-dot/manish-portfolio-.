@@ -283,7 +283,7 @@ export const SKILLS: SkillItem[] = [
   { name: 'Node.js', category: 'languages', level: 'Expert', years: 6, highlight: 'Streams, event emitters, HTTP/2, worker threads, clustering, CLI tooling' },
   { name: 'SQL / PostgreSQL', category: 'languages', level: 'Advanced', years: 5, highlight: 'Complex joins, indexing strategies, CTEs, partition tables, EXPLAIN ANALYZE' },
   { name: 'HTML5 / CSS3', category: 'languages', level: 'Expert', years: 6, highlight: 'Semantic layout, WAI-ARIA APG compliance, CSS Grid, custom properties' },
-  { name: 'Go / Python', category: 'languages', level: 'Proficient', years: 3, highlight: 'Microservice utilities, automated scripts, concurrency primitives' },
+  { name: 'Go', category: 'languages', level: 'Proficient', years: 3, highlight: 'Microservice utilities, automated scripts, concurrency primitives' },
 
   // Frontend
   { name: 'React 19 & Next.js', category: 'frontend', level: 'Expert', years: 6, highlight: 'Server Components, concurrent rendering, custom hooks, Suspense architecture' },

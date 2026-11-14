@@ -1107,6 +1107,7 @@ export default function ContributionSkyline({
         load()
         retheme()
         relayout()
+        kick()
       },
       retheme,
       tipWidth: (w: number) => {
@@ -1142,6 +1143,7 @@ export default function ContributionSkyline({
 
   React.useEffect(() => {
     engine.current?.load()
+    engine.current?.kick()
   }, [model, heightScale])
 
   React.useEffect(() => {
